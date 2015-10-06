@@ -1,0 +1,47 @@
+import java.util.*;
+import network.*;
+
+public class Main_CleanMessage {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Dataset
+		String dataset = "plurk";
+		//String dataset = "facebook";
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Concept ID
+		int conceptId = 31;
+		//int conceptId = 69;
+		//int conceptId = 102;
+
+		// Load user
+		Network n = new Network();
+		//NetworkFactory.loadUser(false, n, "data/user_table");
+		NetworkFactory.loadUser(true, n, "data/" + dataset + "_iii/user_" + dataset + ".txt");
+		System.out.println("User = " + n.getUserCount());
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load message
+		//MessageManager mm = new MessageManager("data/plurk_iii/message_concept31_plurk.txt");
+		MessageManager mm = new MessageManager("data/" + dataset + "_iii/message_concept" + conceptId + "_" + dataset + ".txt", encoding);
+		System.out.println("Count = " + mm.getMessagesCount());
+
+		// Clean message
+		//MessageManager.cleanMessage(n, "data/message", "data/message_cleaned");
+		MessageManager.cleanMessage(true, n, "data/" + dataset + "_iii/message_concept" + conceptId + "_" + dataset + ".txt", "data/" + dataset + "_iii/message_concept" + conceptId + "_" + dataset + "_cleaned.txt", encoding);
+
+		MessageManager mmc = new MessageManager("data/" + dataset + "_iii/message_concept" + conceptId + "_" + dataset + "_cleaned.txt", encoding);
+		System.out.println("Cleaned = " + mmc.getMessagesCount());
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

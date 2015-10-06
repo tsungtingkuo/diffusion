@@ -1,0 +1,74 @@
+import java.util.*;
+import network.*;
+
+public class Main_DiffusionNetwork {
+
+	public static void main(String[] args) throws Exception {
+		
+		int iii = Integer.parseInt(args[0]);
+//		String userFileName = "data/plurk_iii/user_plurk.txt";
+//		String relationFileName = "data/plurk_iii/relation_plurk.txt";
+		String messageFileName = "data/plurk_iii/message_concept40_plurk_cleaned.txt_train_valid";
+		String responseFileName = "data/plurk_iii/response_concept40_plurk_cleaned.txt_train_valid";
+		String diffusionFileName = "dn/diffusion_network_plurk_iii_concept40.txt";
+		if(iii == 2) {
+//			userFileName = "data/plurk_iii_plasticizer/user_plurk.txt";
+//			relationFileName = "data/plurk_iii_plasticizer/relation_plurk.txt";
+			messageFileName = "data/plurk_iii_plasticizer/message_concept2_plurk_cleaned.txt_train_valid";
+			responseFileName = "data/plurk_iii_plasticizer/response_concept2_plurk_cleaned.txt_train_valid";
+			diffusionFileName = "dn/diffusion_network_plurk_iii_plasticizer2.txt";
+		}
+
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load network
+//		Network n = NetworkFactory.getNetwork(true, userFileName, relationFileName);
+//		System.out.println("Network User = " + n.getUserCount());
+//		System.out.println("Network Vertex = " + n.getVertexCount());
+//		System.out.println("Network Edge = " + n.getEdgeCount());
+
+		// Load message
+		MessageManager mm = new MessageManager(messageFileName, encoding);
+		System.out.println("Message = " + mm.getMessagesCount());
+
+		// Load response
+		ResponseManager rm = new ResponseManager(responseFileName, encoding);
+		System.out.println("Response = " + rm.getResponsesCount());
+	
+		// Get diffusion network from original network
+//		DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork(n, mm, rm);
+		DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork(mm, rm);
+		System.out.println("DiffusionNetwork User = " + dn.getUserCount());
+		System.out.println("DiffusionNetwork Vertex = " + dn.getVertexCount());
+		System.out.println("DiffusionNetwork Edge = " + dn.getEdgeCount());
+		
+		// Save diffusion network
+		int count = DiffusionNetworkFactory.saveDiffusionNetwork(dn, diffusionFileName);
+		System.out.println("Save = " + count);
+		
+		// Load diffusion network
+		dn = DiffusionNetworkFactory.getDiffusionNetwork(diffusionFileName);
+		System.out.println("DiffusionNetwork User = " + dn.getUserCount());
+		System.out.println("DiffusionNetwork Vertex = " + dn.getVertexCount());
+		System.out.println("DiffusionNetwork Edge = " + dn.getEdgeCount());
+		
+		// Connected component
+		Vector<Integer> sizes = new Vector<Integer>();
+		Set<Set<Long>> connectedComponents = Statistics.getConnectedComponent(dn);
+		for(Set<Long> component : connectedComponents) {
+			sizes.add(component.size());
+		}
+		TreeSet<Integer> ts = new TreeSet<Integer>(sizes);
+		System.out.println("Max = " + ts.last());
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

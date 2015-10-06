@@ -1,0 +1,72 @@
+import java.io.*;
+import java.util.*;
+import network.*;
+import utility.*;
+
+public class Main_SplitTestDataWithTime {
+
+	public static void main(String[] args) throws Exception {
+				
+		// Validation
+		//String valid = "";
+		//String valid = "valid_";
+		String valid = args[0];
+
+		// Time
+		String startTimeString = "2011-05-08 00:00:00.0";
+		String stopTimeString = "2011-05-16 00:00:00.0";
+		if(valid.equalsIgnoreCase("valid_")) {
+			startTimeString = "2011-04-26 00:00:00.0";
+			stopTimeString = "2011-05-08 00:00:00.0";
+		}
+		
+		// File names
+    	String listFileName = "list/" + valid + "test.txt";
+    	
+		// Dataset
+		String dataset = "plurk";
+
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Split data
+		GregorianCalendar start = Time.parseTime(startTimeString);
+		GregorianCalendar stop = Time.parseTime(stopTimeString);
+    	int[] concepts = Utility.loadIntegerArray(listFileName);
+    	for(int concept : concepts) {
+    		System.out.print("Splitting concept " + concept + " ... ");
+    		FileOutputStream fos = new FileOutputStream("data/" + dataset + "_iii/" + valid + "test/response_" + concept + "_test.txt");
+    		OutputStreamWriter osw = new OutputStreamWriter(fos, encoding);
+    		BufferedWriter bw = new BufferedWriter(osw);
+    		MessageManager mm = new MessageManager("data/" + dataset + "_iii/message_concept" + concept + "_" + dataset + ".txt", encoding);
+    		ResponseManager rm = new ResponseManager("data/" + dataset + "_iii/response_concept" + concept + "_" + dataset + ".txt", encoding);
+    		for(Response r : rm.getResponsesBetweenTime(start, stop, true, false)) {
+    			long messageId = r.getMessageId();
+    			Message m = mm.getMessage(messageId);
+    			if(m != null) {
+    				long messageUserId = m.getUserId();
+        			long responseUserId = r.getUserId();
+        			if(messageUserId != responseUserId) {
+	    				GregorianCalendar t = r.getTime();
+	    				String content = r.getContent(); 
+	    				bw.write(messageUserId + "\t" + responseUserId + "\t" + Time.formatTime(t) + "\t" + content + "\n");
+        			}
+    			}
+    		}
+    		bw.flush();
+    		bw.close();
+    		osw.close();
+    		fos.close();		
+    		System.out.println("done.");
+    	}
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

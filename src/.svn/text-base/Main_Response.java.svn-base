@@ -1,0 +1,36 @@
+import java.util.*;
+import network.*;
+
+public class Main_Response {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Dataset
+		String dataset = "plurk";
+		//String dataset = "facebook";
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Concept ID
+		int conceptId = 40;
+		//int conceptId = 69;
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load response
+		//ResponseManager rm = new ResponseManager("data/response_10000", "data/response_qualifier", "data/response_lang");
+		//ResponseManager rm = new ResponseManager("data/response", "data/response_qualifier", "data/response_lang");
+		ResponseManager rm = new ResponseManager("data/" + dataset + "_iii/response_concept" + conceptId + "_" + dataset + ".txt", encoding);
+		System.out.println(rm.getResponsesCount());
+		//Response r = rm.getResponses().get(0);
+		//System.out.println(r);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

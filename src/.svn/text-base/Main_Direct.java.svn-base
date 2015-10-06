@@ -1,0 +1,45 @@
+
+
+import output.*;
+import utilities.*;
+import network.*;
+
+public class Main_Direct{
+	public static void main(String[] args )throws Exception{
+
+		int iii = Integer.parseInt(args[0]);
+
+		String validUbiFileName = "data/plurk_tongtong/facebook/tongtong_plurk.facebook.valid.ubi.path";
+		String testUbiFileName = "data/plurk_tongtong/facebook/tongtong_plurk.facebook.test.ubi.path";
+		String foldername = "result/plurk_tongtong_facebook";
+		String outputFilename = "result_plurk_tongtong_facebook.txt";
+		if(iii == 1) {
+			validUbiFileName = "data/plurk_iii/concept40/iii.plurk.valid.ubi.path";
+			testUbiFileName = "data/plurk_iii/concept40/iii.plurk.test.ubi.path";
+			foldername = "result/plurk_iii_concept40";
+			outputFilename = "result_plurk_iii_concept40.txt";
+		}
+		else if(iii == 2) {
+			validUbiFileName = "data/plurk_iii_plasticizer/concept2/plurk.iii.plastic.2.valid.ubi.path";
+			testUbiFileName = "data/plurk_iii_plasticizer/concept2/plurk.iii.plastic.2.test.ubi.path";
+			foldername = "result/plurk_iii_plasticizer2";
+			outputFilename = "result_plurk_iii_plasticizer2.txt";
+		}
+		else if(iii == 3) {
+			validUbiFileName = "data/plurk_iii/concept40/iii.plurk.valid.ubi.path";
+			testUbiFileName = "data/plurk_iii/concept40/iii.plurk.test.ubi.path";
+			foldername = "result/plurk_iii_dn_concept40";
+			outputFilename = "result_plurk_iii_dn_concept40.txt";
+		}
+		
+		// read valid scores 
+		Network valid_ubi_path = IOUtility.readOneForest( validUbiFileName ); 
+		// read test scores 
+		Network test_ubi_path = IOUtility.readOneForest( testUbiFileName );	
+		
+		PathOrganizer organizer = new PathOrganizer( valid_ubi_path , test_ubi_path );
+		organizer.readHeadDir( foldername );
+		organizer.print( outputFilename );
+	
+	}
+}

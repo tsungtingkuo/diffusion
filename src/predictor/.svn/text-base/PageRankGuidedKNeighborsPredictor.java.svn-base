@@ -1,0 +1,30 @@
+package predictor;
+
+import java.util.*;
+import edu.uci.ics.jung.algorithms.scoring.*;
+import utility.*;
+import network.*;
+import transformer.*;
+
+public class PageRankGuidedKNeighborsPredictor extends GuidedKNeighborsPredictor {
+	
+	PageRank<Long, Long> pr = null;
+
+	public TreeMap<Long, Double> selectTopK(Vector<Long> candidates, long sourceId, int k) {
+		TreeMap<Long, Double> tm = new TreeMap<Long, Double>();
+		for(long id : candidates) {
+			//double value = this.pr.getVertexScore(sourceId); 
+			double value = this.pr.getVertexScore(id); 
+			tm.put(id, value);
+		}
+		return Utility.getTopValuedLongToDoubleTreeMap(tm, k, true);
+	}
+		
+	public PageRankGuidedKNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+    	//this.pr = new PageRank<Long, Long>(this.dnt, 0.15);
+		NodePageRankEdgeWeights nprew = new NodePageRankEdgeWeights(this.dnt);
+		this.pr = new PageRank<Long, Long>(this.dnt, nprew, 0.15);
+		this.pr.evaluate();
+	}
+}

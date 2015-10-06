@@ -1,0 +1,94 @@
+import network.*;
+import model.*;
+import selector.*;
+import runflow.*;
+import utilities.*;
+
+import java.io.*;
+import java.util.*;
+import score.*;
+
+public class Main_SGRW{
+	public static int interval = 1;
+	public static void main( String[] args ) throws Exception{
+		
+		int linkSelectionMethod = Integer.parseInt(args[0]);
+		
+		String simplifiedFileName = "data/plurk_iii/concept40/iii.40.test.parent_outdegree.txt";
+		
+		int activateNumber = 38320;
+		//boolean isIII=true;
+		//String userFileName = "data/plurk_iii/user_plurk.txt";
+		//String relationFileName = "data/plurk_iii/relation_plurk.txt";
+		String relationFileName = "data/plurk_iii/relation_plurk_dn.txt";
+		String A0Filename = "data/plurk_iii/concept40/iii.plurk.test.ubi.A0";
+		String OldA0Filename = "data/plurk_iii/concept40/iii.plurk.train_valid.ubi.oldA0";
+		String runflowType = "-total";
+		int diffusionNetworkConcept = Integer.parseInt(args[1]);
+		//String outputFileName = "result/plurk_iii_concept40/test/iii_plurk.concept40.total.rw." + activateNumber + "_S_" + linkSelectionMethod + "_" + diffusionNetworkConcept + ".ubi.test.rst";
+		String outputFileName = "result/plurk_iii_dn_concept40/test/iii_plurk_dn.concept40.total.rw." + activateNumber + "_S_" + linkSelectionMethod + "_" + diffusionNetworkConcept + ".ubi.test.rst";
+		String diffusionFileName = "dn/diffusion_network_plurk_iii_concept" +  diffusionNetworkConcept + ".txt";
+
+		double startTime = 0.0;
+		System.out.println("Loading...");
+		startTime = System.currentTimeMillis();
+		//Network n = NetworkFactory.getNetwork( isIII, userFileName , relationFileName );
+		Network n = DiffusionNetworkFactory.getDiffusionNetwork(relationFileName);
+		System.out.println("Elpased Time=" + ( System.currentTimeMillis() - startTime ) );
+		System.out.println("Loading...end");
+	
+		Collection<Long> A0 =null ;	
+		A0 = FromFileSelector.get( A0Filename );  
+		Collection<Long> oldA0 = null;
+		oldA0 = FromFileSelector.get( OldA0Filename );
+
+		System.out.println("Running....");
+		startTime = System.currentTimeMillis();
+		// init model
+		DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork(diffusionFileName);
+		SGRWModel model= new SGRWModel(linkSelectionMethod, simplifiedFileName);
+		model.setActivateNumber(activateNumber);
+		model.setDiffusionNetwork(dn);
+		// init scores
+		Map<Long, Double> scores = new HashMap<Long, Double>();
+		// init scorer
+		Scorer scorer = new IFScorer();
+		// init runflow
+		Runflow runflow = null ;
+		TotalRunflow totalflow=null; 
+		if( runflowType.compareTo( "-loo" ) == 0){
+			runflow = new LOORunflow();
+		}else if( runflowType.compareTo("-obo")== 0 ) {
+	//		runflow = new OBORunflow();
+			OBORunflow tmpflow = new OBORunflow();
+			String pathOutput = outputFileName + ".path";
+			File pathFile = new File( pathOutput );
+			if( pathFile.exists() ){
+				pathFile.delete();
+			}
+			tmpflow.setPathOutput( pathOutput ); 
+			runflow = tmpflow ;
+		}else if( runflowType.compareTo( "-total") == 0 ){
+			totalflow = new TotalRunflow();
+		}else{
+			System.out.println("Error :Please setting run flow.");
+			return ;
+		}
+		if( ( runflowType.compareTo( "-loo" ) == 0 ) || ( runflowType.compareTo("-obo") == 0 )){ 
+			startTime = System.currentTimeMillis();
+			runflow.run( model, n , oldA0, A0 , scorer, scores ); 	
+			System.out.println("Elpased Time=" + (System.currentTimeMillis()-startTime)/1000 + "(sec)");
+			System.out.println("Running...end");
+			IOUtility.writeScores( outputFileName,  scores );
+		}else if(  runflowType.compareTo( "-total")== 0 ){
+			startTime = System.currentTimeMillis();
+			Network o_n = totalflow.run( model, n , oldA0, A0 ); 
+			IOUtility.writeA0Forest( outputFileName, o_n, totalflow.getLink2time() , A0 );     
+			System.out.println("Elpased Time=" + ( System.currentTimeMillis() - startTime ) );
+			System.out.println("Running...end");
+			System.out.println("--dump old a0 path-- ");
+			IOUtility.writeA0Forest( outputFileName + ".oldA0" , o_n, totalflow.getLink2time() , oldA0 );
+		}
+	}
+}
+

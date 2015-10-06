@@ -1,0 +1,141 @@
+import network.*;
+import model.*;
+import selector.*;
+import runflow.*;
+import utilities.*;
+
+import java.io.*;
+import java.util.*;
+import score.*;
+
+public class Main_GRW{
+	public static int interval = 1;
+	public static void main( String[] args ) throws Exception{
+		
+		int iii = Integer.parseInt(args[0]);
+		int nodeSelectionMethod = Integer.parseInt(args[1]);
+		int linkSelectionMethod = Integer.parseInt(args[2]);
+		
+		int activateNumber = 0;
+		boolean isIII=false;
+		String userFileName = "data/plurk_tongtong/user_table";
+		String relationFileName = "data/plurk_tongtong/relation_table";
+		String A0Filename = "data/plurk_tongtong/facebook/plurk.facebook.test.ubi.A0";
+		String OldA0Filename = "data/plurk_tongtong/facebook/plurk.facebook.train_valid.ubi.oldA0";
+		String runflowType = "-total";
+		String outputFileName = "result/plurk_tongtong_facebook/test/tongtong_plurk.facebook.total.rw." + activateNumber + "_" + nodeSelectionMethod + "_" + linkSelectionMethod + ".ubi.test.rst";
+		String diffusionFileName = "";
+		String snUserFileName = "";
+		String snRelationFileName = "";
+		if(iii == 1) {
+			activateNumber = 38320;
+			isIII=true;
+			userFileName = "data/plurk_iii/user_plurk.txt";
+			relationFileName = "data/plurk_iii/relation_plurk.txt";
+			A0Filename = "data/plurk_iii/concept40/iii.plurk.test.ubi.A0";
+			OldA0Filename = "data/plurk_iii/concept40/iii.plurk.train_valid.ubi.oldA0";
+			runflowType = "-total";
+
+			// Use other concept to predict target one
+			int diffusionNetworkConcept = Integer.parseInt(args[3]);
+			outputFileName = "result/plurk_iii_concept40/test/iii_plurk.concept40.total.rw." + activateNumber + "_" + nodeSelectionMethod + "_" + linkSelectionMethod + "_" + diffusionNetworkConcept + ".ubi.test.rst";
+			diffusionFileName = "dn/diffusion_network_plurk_iii_concept" +  diffusionNetworkConcept + ".txt";
+		}
+		else if(iii == 2) {
+			activateNumber = 29791;
+			isIII=true;
+			userFileName = "data/plurk_iii_plasticizer/user_plurk.txt";
+			relationFileName = "data/plurk_iii_plasticizer/relation_plurk.txt";
+			A0Filename = "data/plurk_iii_plasticizer/concept2/plurk.iii.plastic.2.test.ubi.A0";
+			OldA0Filename = "data/plurk_iii_plasticizer/concept2/plurk.iii.plastic.2.train_valid.ubi.oldA0";
+			runflowType = "-total";
+			outputFileName = "result/plurk_iii_plasticizer2/test/plasticizer_plurk.concept2.total.rw." + activateNumber + "_" + nodeSelectionMethod + "_" + linkSelectionMethod + ".ubi.test.rst";
+			diffusionFileName = "dn/diffusion_network_plurk_iii_plasticizer2.txt";
+		}
+		else if(iii == 3) {
+			activateNumber = 38320;
+			isIII=true;
+			relationFileName = "data/plurk_iii/relation_plurk_dn.txt";
+			A0Filename = "data/plurk_iii/concept40/iii.plurk.test.ubi.A0";
+			OldA0Filename = "data/plurk_iii/concept40/iii.plurk.train_valid.ubi.oldA0";
+			runflowType = "-total";
+
+			// Use other concept to predict target one
+			int diffusionNetworkConcept = Integer.parseInt(args[3]);
+			outputFileName = "result/plurk_iii_dn_concept40/test/iii_plurk_dn.concept40.total.rw." + activateNumber + "_" + nodeSelectionMethod + "_" + linkSelectionMethod + "_" + diffusionNetworkConcept + ".ubi.test.rst";
+			diffusionFileName = "dn/diffusion_network_plurk_iii_concept" +  diffusionNetworkConcept + ".txt";
+
+			snUserFileName = "data/plurk_iii/user_plurk.txt";
+			snRelationFileName = "data/plurk_iii/relation_plurk.txt";
+		}
+
+		double startTime = 0.0;
+		System.out.println("Loading...");
+		startTime = System.currentTimeMillis();
+		Network n = null;
+		if(iii == 3) {
+			n = DiffusionNetworkFactory.getDiffusionNetwork(relationFileName);
+		}
+		else {
+			n = NetworkFactory.getNetwork( isIII, userFileName , relationFileName );
+		}
+		System.out.println("Elpased Time=" + ( System.currentTimeMillis() - startTime ) );
+		System.out.println("Loading...end");
+	
+		Collection<Long> A0 =null ;	
+		A0 = FromFileSelector.get( A0Filename );  
+		Collection<Long> oldA0 = null;
+		oldA0 = FromFileSelector.get( OldA0Filename );
+
+		System.out.println("Running....");
+		startTime = System.currentTimeMillis();
+		// init model
+		DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork(diffusionFileName);
+		GRWModel model= new GRWModel(nodeSelectionMethod, linkSelectionMethod);
+		model.setActivateNumber(activateNumber);
+		model.setDiffusionNetwork(dn);
+		model.setUserFileName(snUserFileName);
+		model.setRelationFileName(snRelationFileName);
+		// init scores
+		Map<Long, Double> scores = new HashMap<Long, Double>();
+		// init scorer
+		Scorer scorer = new IFScorer();
+		// init runflow
+		Runflow runflow = null ;
+		TotalRunflow totalflow=null; 
+		if( runflowType.compareTo( "-loo" ) == 0){
+			runflow = new LOORunflow();
+		}else if( runflowType.compareTo("-obo")== 0 ) {
+	//		runflow = new OBORunflow();
+			OBORunflow tmpflow = new OBORunflow();
+			String pathOutput = outputFileName + ".path";
+			File pathFile = new File( pathOutput );
+			if( pathFile.exists() ){
+				pathFile.delete();
+			}
+			tmpflow.setPathOutput( pathOutput ); 
+			runflow = tmpflow ;
+		}else if( runflowType.compareTo( "-total") == 0 ){
+			totalflow = new TotalRunflow();
+		}else{
+			System.out.println("Error :Please setting run flow.");
+			return ;
+		}
+		if( ( runflowType.compareTo( "-loo" ) == 0 ) || ( runflowType.compareTo("-obo") == 0 )){ 
+			startTime = System.currentTimeMillis();
+			runflow.run( model, n , oldA0, A0 , scorer, scores ); 	
+			System.out.println("Elpased Time=" + (System.currentTimeMillis()-startTime)/1000 + "(sec)");
+			System.out.println("Running...end");
+			IOUtility.writeScores( outputFileName,  scores );
+		}else if(  runflowType.compareTo( "-total")== 0 ){
+			startTime = System.currentTimeMillis();
+			Network o_n = totalflow.run( model, n , oldA0, A0 ); 
+			IOUtility.writeA0Forest( outputFileName, o_n, totalflow.getLink2time() , A0 );     
+			System.out.println("Elpased Time=" + ( System.currentTimeMillis() - startTime ) );
+			System.out.println("Running...end");
+			System.out.println("--dump old a0 path-- ");
+			IOUtility.writeA0Forest( outputFileName + ".oldA0" , o_n, totalflow.getLink2time() , oldA0 );
+		}
+	}
+}
+

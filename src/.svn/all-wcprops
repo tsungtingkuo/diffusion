@@ -1,0 +1,671 @@
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/svn/ppp/!svn/ver/382/ppp/src
+END
+Main_TopicLinkResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/ppp/!svn/ver/229/ppp/src/Main_TopicLinkResult.java
+END
+Main_IC.java
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/ppp/!svn/ver/14/ppp/src/Main_IC.java
+END
+Main_Split.java
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/ppp/!svn/ver/1/ppp/src/Main_Split.java
+END
+Main_Predictor.java
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/ppp/!svn/ver/354/ppp/src/Main_Predictor.java
+END
+Main_SVM_Data.java
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/ppp/!svn/ver/1/ppp/src/Main_SVM_Data.java
+END
+Main_SplitTestDataWithTime.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/ppp/!svn/ver/171/ppp/src/Main_SplitTestDataWithTime.java
+END
+Main_CleanResponse.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/166/ppp/src/Main_CleanResponse.java
+END
+Main_CrossValidationTrain.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/ppp/!svn/ver/363/ppp/src/Main_CrossValidationTrain.java
+END
+Main_CleanAllMessages.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/166/ppp/src/Main_CleanAllMessages.java
+END
+Main_Unique.java
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/ppp/!svn/ver/1/ppp/src/Main_Unique.java
+END
+Main_CurveFitting.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/1/ppp/src/Main_CurveFitting.java
+END
+Main_TimeConcept.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/261/ppp/src/Main_TimeConcept.java
+END
+Main_DNCombineTrainWithContentAllCategory.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/ppp/!svn/ver/258/ppp/src/Main_DNCombineTrainWithContentAllCategory.java
+END
+Main_ClassifierTrainTestCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/ppp/!svn/ver/330/ppp/src/Main_ClassifierTrainTestCV.java
+END
+Main_PatternCategory.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/ppp/!svn/ver/258/ppp/src/Main_PatternCategory.java
+END
+Main_BaselineCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/379/ppp/src/Main_BaselineCV.java
+END
+Main_DNCombineTrainWithContentAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ppp/!svn/ver/317/ppp/src/Main_DNCombineTrainWithContentAll.java
+END
+Main_Pattern.java
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/ppp/!svn/ver/201/ppp/src/Main_Pattern.java
+END
+Main_User.java
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/ppp/!svn/ver/1/ppp/src/Main_User.java
+END
+Main_SplitDataCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/316/ppp/src/Main_SplitDataCV.java
+END
+Main_Test.java
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/ppp/!svn/ver/316/ppp/src/Main_Test.java
+END
+Main_CandidateAnalysis.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/161/ppp/src/Main_CandidateAnalysis.java
+END
+Main_PrepareDataCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/360/ppp/src/Main_PrepareDataCV.java
+END
+Main_SGRW.java
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/ppp/!svn/ver/14/ppp/src/Main_SGRW.java
+END
+Main_PredictorCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/390/ppp/src/Main_PredictorCV.java
+END
+Main_DiffusionNetworkCombineAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/ppp/!svn/ver/15/ppp/src/Main_DiffusionNetworkCombineAll.java
+END
+Main_DirectCSV.java
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/ppp/!svn/ver/23/ppp/src/Main_DirectCSV.java
+END
+Main_CleanMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/ppp/!svn/ver/166/ppp/src/Main_CleanMessage.java
+END
+Main_UserRegistrationTime.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/ppp/!svn/ver/1/ppp/src/Main_UserRegistrationTime.java
+END
+Main_DiffusionNetworkAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/ppp/!svn/ver/166/ppp/src/Main_DiffusionNetworkAll.java
+END
+Main_PeakStatistics.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/ppp/!svn/ver/326/ppp/src/Main_PeakStatistics.java
+END
+Main_SplitTrainDataWithTime.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/ppp/!svn/ver/171/ppp/src/Main_SplitTrainDataWithTime.java
+END
+Main_Time.java
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/ppp/!svn/ver/263/ppp/src/Main_Time.java
+END
+Main_TopicModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/306/ppp/src/Main_TopicModel.java
+END
+Main_Model.java
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/ppp/!svn/ver/1/ppp/src/Main_Model.java
+END
+Main_GroundAnalysis.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/ppp/!svn/ver/161/ppp/src/Main_GroundAnalysis.java
+END
+Main_TrainDataAggresive.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/ppp/!svn/ver/174/ppp/src/Main_TrainDataAggresive.java
+END
+Main_PatternCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/ppp/!svn/ver/321/ppp/src/Main_PatternCV.java
+END
+Main_LinkNetworkPR.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/ppp/!svn/ver/89/ppp/src/Main_LinkNetworkPR.java
+END
+Main_PeakCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/ppp/!svn/ver/326/ppp/src/Main_PeakCV.java
+END
+Main_SortDataCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/317/ppp/src/Main_SortDataCV.java
+END
+Main_TopicResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/255/ppp/src/Main_TopicResult.java
+END
+Main_TopicNodeData.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/304/ppp/src/Main_TopicNodeData.java
+END
+Main_Convert.java
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/ppp/!svn/ver/358/ppp/src/Main_Convert.java
+END
+Main_JaccardAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/ppp/!svn/ver/40/ppp/src/Main_JaccardAll.java
+END
+Main_DNClearWeight.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/174/ppp/src/Main_DNClearWeight.java
+END
+Main_ComputeActivations.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/17/ppp/src/Main_ComputeActivations.java
+END
+Main_DataDNCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/ppp/!svn/ver/317/ppp/src/Main_DataDNCV.java
+END
+Main_SplitTestData.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/171/ppp/src/Main_SplitTestData.java
+END
+Main_DNCombineTrainAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/317/ppp/src/Main_DNCombineTrainAll.java
+END
+Main_LibSVMData.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/314/ppp/src/Main_LibSVMData.java
+END
+Main_TopicLinkData.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/302/ppp/src/Main_TopicLinkData.java
+END
+Main_Jaccard.java
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/ppp/!svn/ver/94/ppp/src/Main_Jaccard.java
+END
+Main_DiffusionNumberAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/1/ppp/src/Main_DiffusionNumberAll.java
+END
+Main_PrepareData.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/261/ppp/src/Main_PrepareData.java
+END
+Main_LinkNetworkPRP.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/89/ppp/src/Main_LinkNetworkPRP.java
+END
+Main_Network.java
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/ppp/!svn/ver/1/ppp/src/Main_Network.java
+END
+Main_LibSVMTrain.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/314/ppp/src/Main_LibSVMTrain.java
+END
+Main_LibSVM.java
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/ppp/!svn/ver/295/ppp/src/Main_LibSVM.java
+END
+Main_GRW.java
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/ppp/!svn/ver/20/ppp/src/Main_GRW.java
+END
+Main_DiffusionNumber.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/1/ppp/src/Main_DiffusionNumber.java
+END
+Main_DiffusionNetwork.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/166/ppp/src/Main_DiffusionNetwork.java
+END
+Main_CurveFittingAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/1/ppp/src/Main_CurveFittingAll.java
+END
+Main_PatternToDN.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/65/ppp/src/Main_PatternToDN.java
+END
+Main_CrossValidationTestCategory.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/ppp/!svn/ver/363/ppp/src/Main_CrossValidationTestCategory.java
+END
+Main_TestDataAggresive.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/174/ppp/src/Main_TestDataAggresive.java
+END
+Main_LinkNetwork.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/123/ppp/src/Main_LinkNetwork.java
+END
+Main_ClassifierDataCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/371/ppp/src/Main_ClassifierDataCV.java
+END
+Main_SaveChartAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/29/ppp/src/Main_SaveChartAll.java
+END
+Main_PredictorTime.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/261/ppp/src/Main_PredictorTime.java
+END
+Main_ClassifierTrainCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/386/ppp/src/Main_ClassifierTrainCV.java
+END
+Main_CleanAllResponses.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/166/ppp/src/Main_CleanAllResponses.java
+END
+Main_ClassifierCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/ppp/!svn/ver/384/ppp/src/Main_ClassifierCV.java
+END
+Main_Peak.java
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/ppp/!svn/ver/326/ppp/src/Main_Peak.java
+END
+Main_DNCombineAllCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/ppp/!svn/ver/317/ppp/src/Main_DNCombineAllCV.java
+END
+Main_DNCombineTestAllWithTrain.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/ppp/!svn/ver/317/ppp/src/Main_DNCombineTestAllWithTrain.java
+END
+Main_SortTestData.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/ppp/!svn/ver/263/ppp/src/Main_SortTestData.java
+END
+Main_TopicNodeCombine.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/303/ppp/src/Main_TopicNodeCombine.java
+END
+Main_DNCombineTrainWithContentAllSimilarityCategory.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/ppp/!svn/ver/258/ppp/src/Main_DNCombineTrainWithContentAllSimilarityCategory.java
+END
+Main_SplitTrainData.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/ppp/!svn/ver/171/ppp/src/Main_SplitTrainData.java
+END
+Main_DNCombineTrainWithContentAllSimilarity.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/ppp/!svn/ver/272/ppp/src/Main_DNCombineTrainWithContentAllSimilarity.java
+END
+Main_Message.java
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/ppp/!svn/ver/166/ppp/src/Main_Message.java
+END
+Main_DiffusionNetworkWithTestAll.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/ppp/!svn/ver/166/ppp/src/Main_DiffusionNetworkWithTestAll.java
+END
+Main_Similarity.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/272/ppp/src/Main_Similarity.java
+END
+Main_PageRank.java
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/ppp/!svn/ver/1/ppp/src/Main_PageRank.java
+END
+Main_RW.java
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/ppp/!svn/ver/14/ppp/src/Main_RW.java
+END
+Main_TopicLinkCombine.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/302/ppp/src/Main_TopicLinkCombine.java
+END
+Main_Statistics.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/390/ppp/src/Main_Statistics.java
+END
+Main_TestDataDN.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/317/ppp/src/Main_TestDataDN.java
+END
+Main_SIR.java
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/ppp/!svn/ver/14/ppp/src/Main_SIR.java
+END
+Main_DiffusionNetworkCombine.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/ppp/!svn/ver/1/ppp/src/Main_DiffusionNetworkCombine.java
+END
+Main_Response.java
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/ppp/!svn/ver/166/ppp/src/Main_Response.java
+END
+Main_SVM_EV.java
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/ppp/!svn/ver/1/ppp/src/Main_SVM_EV.java
+END
+Main_DataAggresiveCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/ppp/!svn/ver/317/ppp/src/Main_DataAggresiveCV.java
+END
+Main_BaselineDiffusionModelCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/ppp/!svn/ver/385/ppp/src/Main_BaselineDiffusionModelCV.java
+END
+Main_CrossValidationTestRandom.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/ppp/!svn/ver/363/ppp/src/Main_CrossValidationTestRandom.java
+END
+Main_TopicData.java
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/ppp/!svn/ver/253/ppp/src/Main_TopicData.java
+END
+Main_CV.java
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/ppp/!svn/ver/384/ppp/src/Main_CV.java
+END
+Main_RWBruteForce.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/1/ppp/src/Main_RWBruteForce.java
+END
+Main_CandidateAnalysisCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/ppp/!svn/ver/325/ppp/src/Main_CandidateAnalysisCV.java
+END
+Main_Direct.java
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/ppp/!svn/ver/14/ppp/src/Main_Direct.java
+END
+Main_Score.java
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/ppp/!svn/ver/1/ppp/src/Main_Score.java
+END
+Main_DNCombineTrainWithContentAllSimilarityCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/ppp/!svn/ver/317/ppp/src/Main_DNCombineTrainWithContentAllSimilarityCV.java
+END
+Main_SortTrainData.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/263/ppp/src/Main_SortTrainData.java
+END
+Main_LT.java
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/ppp/!svn/ver/14/ppp/src/Main_LT.java
+END
+Main_SaveChart.java
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/ppp/!svn/ver/29/ppp/src/Main_SaveChart.java
+END
+Main_TP.java
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/ppp/!svn/ver/116/ppp/src/Main_TP.java
+END
+Main_TopicNodeResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/ppp/!svn/ver/304/ppp/src/Main_TopicNodeResult.java
+END
+Main_UTF8.java
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/ppp/!svn/ver/1/ppp/src/Main_UTF8.java
+END
+Main_TrainDataDN.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/261/ppp/src/Main_TrainDataDN.java
+END
+Main_LibSVMTrainTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/ppp/!svn/ver/241/ppp/src/Main_LibSVMTrainTest.java
+END

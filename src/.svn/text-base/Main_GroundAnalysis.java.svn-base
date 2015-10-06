@@ -1,0 +1,46 @@
+import java.util.*;
+import utility.*;
+import network.*;
+
+public class Main_GroundAnalysis {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+			
+		// File names
+    	String testListFileName = "list/" + valid + "test.txt";
+    	
+    	// Dataset
+    	String dataset = "plurk";
+    	
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Ground analysis
+    	System.out.println();
+		System.out.println("^Topic^Total^");
+    	int[] testConcepts = Utility.loadIntegerArray(testListFileName);
+		int totalSum = 0;
+		TreeSet<String> totalUnique = new TreeSet<String>(); 
+		for(int testConcept : testConcepts) {
+			DiffusionNetwork gdn = DiffusionNetworkFactory.getDiffusionNetwork("data/" + dataset + "_iii/" + valid + "test/dn_" + testConcept + "_test.txt");
+    		int total = gdn.getEdgeCount();
+  			totalSum += total;
+  			for(Long e : gdn.getEdges()) {
+  	  			totalUnique.add(gdn.getSource(e) + "_" + gdn.getDest(e));
+  			}
+			System.out.println("|" + testConcept + "|" + total + "|");
+    	}
+		System.out.println("|Total|" + totalSum + "|"); 
+		System.out.println("|Unique|" + totalUnique.size() + "|"); 
+    
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

@@ -1,0 +1,21 @@
+import supervised.*;
+
+public class Main_SVM_Data {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Setting name
+		String name = "pt.facebook";
+				
+		// Basic information
+		System.out.println("SVM Data");
+		System.out.println("Name = " + name);
+
+		// LibSVM
+		MyLibSVM svm = new MyLibSVM(name, "score/ground/", "score/prediction/valid/", "score/prediction/test/");
+		int supervised = svm.prepare(true);
+		System.out.println("Supervised = " + supervised);
+		int unsupervised = svm.prepare(false);
+		System.out.println("Unsupervised = " + unsupervised);
+	}
+}

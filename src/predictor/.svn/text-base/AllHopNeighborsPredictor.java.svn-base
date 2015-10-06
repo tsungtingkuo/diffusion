@@ -1,0 +1,50 @@
+package predictor;
+
+import java.util.*;
+import network.*;
+
+public class AllDHopNeighborsPredictor extends DoNothingPredictor {
+	
+	int d = 1;
+	
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+
+		// Select all neighbors
+		Vector<Long> queue = new Vector<Long>();
+		Vector<Long> nextqueue = new Vector<Long>();
+		for(long u : aggresives) {
+			queue.add(u);
+		}
+		for(int j=0; j<d; j++) {
+			for(long uid1 : queue) {
+				Vector<Long> candidates = getCandidates(uid1);
+				for(long uid2 : candidates) {
+					result = this.activate(result, uid1, uid2);
+					nextqueue.add(uid2);
+				}
+			}
+			queue = new Vector<Long>(nextqueue);
+			nextqueue = new Vector<Long>();
+		}
+		
+		return result;
+	}
+
+	public AllDHopNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) {
+		super(dn, dnt);
+	}
+
+	/**
+	 * @return the d
+	 */
+	public int getD() {
+		return d;
+	}
+
+	/**
+	 * @param d the d to set
+	 */
+	public void setD(int d) {
+		this.d = d;
+	}
+}

@@ -1,0 +1,78 @@
+package main;
+import java.util.*;
+import classifier.*;
+
+public class Main_ClassifierTrainCV {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Task
+		//int predictionTask = Integer.parseInt(args[0]);
+
+		// Classifier
+		//String classifier = "nb";
+		//String classifier = "liblinear";
+		//String classifier = "libsvm";
+		String classifier = args[0];
+		
+		// Instance
+		//int instance = ClassifierCV.INSTANCE_LINK;
+		int instance = ClassifierCV.INSTANCE_LINKTOPIC;
+		//int instance = Integer.parseInt(args[1]);
+		
+		// Feature
+		//int feature = Integer.parseInt(args[2]);
+		int feature = Integer.parseInt(args[1]);
+		
+		// Parameter
+		String w = "1";
+		//String c = "1";
+		String c = args[2];
+
+		// Fold
+		int fold = Integer.parseInt(args[3]);		
+
+		// Other Parameter
+		String s = "1";		// LibLinear
+		if(classifier.equalsIgnoreCase("libsvm")) {
+			//s = "2";		// LibSVM one-class
+			s = "0";		// LibSVM C-SVC
+		}
+		//String t = "2";	// RBF
+		String t = "1";		// Polynomial
+		//String t = "0";	// Linear
+		String h = "0";		// Shrinking
+		String d = "2";		// Degree
+		String n = "0.5";
+		String b = "-1";
+		String e = "0.1";
+		if(classifier.equalsIgnoreCase("libsvm")) {
+			e = "0.0001";
+		}
+    	// Dataset
+    	String dataset = "plurk";
+    	
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Train (valid must be "valid_")
+		//if(predictionTask == 0) {
+			ClassifierCV my = new ClassifierCV(dataset, classifier, instance, feature, w, c, fold);
+			if(classifier.equalsIgnoreCase("libsvm")) {
+				my.trainSVM(s, t, c, h, d, n, e);
+			}
+			else if(classifier.equalsIgnoreCase("liblinear")) {
+				my.trainLinear(s, c, b, e, w);
+			}
+			else {
+				my.trainWeka();
+			}
+		//}
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed minutes = " + elapsedTime/60000);
+	}
+}

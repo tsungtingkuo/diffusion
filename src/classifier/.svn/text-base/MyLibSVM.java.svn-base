@@ -1,0 +1,491 @@
+package classifier;
+
+import java.io.*;
+import java.util.*;
+
+import network.*;
+import liblinear.*;
+import utility.*;
+//import transformer.*;
+//import edu.uci.ics.jung.algorithms.scoring.*;
+
+public class MyLibSVM {
+
+	final static public int INSTANCE_UNKNOWN = -1;
+	final static public int INSTANCE_LINK = 0;
+	final static public int INSTANCE_LINKTOPIC = 1;
+
+	String dataset = "";
+	String classifier = "";
+	String valid = "";
+	String w = "1";
+	String c = "1";
+	int instance = INSTANCE_UNKNOWN;
+	int feature = 0;
+
+	int positive = 0;
+	int negative = 0;
+	int totalPositive = 0;
+	int totalNegative = 0;
+	
+	DiffusionNetwork dn = null;
+
+	DiffusionNetwork dnTrain = null;
+	DiffusionNetwork dnPattern = null;
+//	DiffusionNetwork dnHrefPattern = null;
+//	DiffusionNetwork dnImgPattern = null;
+//	PageRank<Long, Long> pr = null;
+
+//	DiffusionNetwork dnTestPattern = null;
+	
+	DiffusionNetwork dnTest = null;
+	DiffusionNetwork dnTestSimilarityLDA = null;
+
+	long[] auTest = null;
+	
+	double[] testSimilarityLDA = null;
+
+	double[] testHiddenLDA = null;
+
+//	PageRank<Long, Long> testPrLDA = null;
+
+//	TreeMap<String, double[]> linkHiddenLDA = new TreeMap<String, double[]>();
+	
+	TreeMap<Long, double[]> nodeHiddenLDA = new TreeMap<Long, double[]>();
+	TreeMap<Long, double[]> nodeHiddenLDA2 = new TreeMap<Long, double[]>();
+
+//	TreeMap<Long, Double> testNodeTopicLDA = new TreeMap<Long, Double>();
+
+//	DiffusionNetwork dnTime = null;
+	
+	public MyLibSVM(String dataset, String classifier, String valid, int instance, int feature, String w, String c) {
+		super();
+		this.dataset = dataset;
+		this.classifier = classifier;
+		this.valid = valid;
+		this.instance = instance;
+		this.feature = feature;
+		this.w = w;
+		this.c = c;
+	}
+
+	public void getData(PrintWriter pw, long source, long dest) throws Exception {
+
+		Vector<Double> features = new Vector<Double>();
+
+		// TH (7)
+		if((this.feature/10000000)%10 == 1) {
+			for(int i=0; i<this.testHiddenLDA.length; i++) {
+				features.add(this.testHiddenLDA[i]);
+			}
+		}
+
+		// TS (1)
+		if((this.feature/1000000)%10 == 1) {
+			features.add(this.dnTestSimilarityLDA.getOutWeightPlusOne(source, dest));	// Useful
+		}
+
+		// UPLC (14)
+		if((this.feature/100000)%10 == 1) {
+			double[] sourceNodes = this.nodeHiddenLDA.get(source);
+			if(sourceNodes != null) {
+				for(int i=0; i<sourceNodes.length; i++) {
+					features.add(sourceNodes[i]);
+				}
+			}
+			double[] destNodes = this.nodeHiddenLDA.get(dest);
+			if(destNodes != null) {
+				for(int i=0; i<destNodes.length; i++) {
+					features.add(destNodes[i]);
+				}
+			}
+		}
+
+		// UH (14)
+		if((this.feature/10000)%10 == 1) {
+			double[] sourceNodes2 = this.nodeHiddenLDA2.get(source);
+			if(sourceNodes2 != null) {
+				for(int i=0; i<sourceNodes2.length; i++) {
+					features.add(sourceNodes2[i]);
+				}
+			}
+			double[] destNodes2 = this.nodeHiddenLDA2.get(dest);
+			if(destNodes2 != null) {
+				for(int i=0; i<destNodes2.length; i++) {
+					features.add(destNodes2[i]);
+				}
+			}
+		}
+
+		// ID (2)
+		if((this.feature/1000)%10 == 1) {
+			features.add(this.dn.inDegreePlusOne(source));
+			features.add(this.dn.inDegreePlusOne(dest));
+		}
+			
+		// OD (2)
+		if((this.feature/100)%10 == 1) {
+			features.add(this.dn.outDegreePlusOne(source));
+			features.add(this.dn.outDegreePlusOne(dest));
+		}
+
+		// DF (1)
+		if((this.feature/10)%10 == 1) {
+			features.add(this.dnTrain.getOutWeightPlusOne(source, dest));			
+		}
+		
+		// CI (1)
+		if((this.feature/1)%10 == 1) {
+			features.add(this.dnPattern.getOutWeightPlusOne(source, dest));	// Useful
+		}
+		
+		
+//		for(int i=0; i<this.testHiddenLDA.length; i++) {
+//			features.add(this.testHiddenLDA[i]);
+//		}
+		
+//		if(this.feature==1 || this.feature==4 || this.feature==5 || this.feature==7) {
+//			features.add(this.dnPattern.getOutWeightPlusOne(source, dest));	// Useful
+//		}
+//
+//		if(this.feature==2 || this.feature==4 || this.feature==6 || this.feature==7) {
+//			features.add(this.dnTestSimilarityLDA.getOutWeightPlusOne(source, dest));	// Useful
+//		}
+//
+//		if(this.feature==3 || this.feature==5 || this.feature==6 || this.feature==7) {
+//			double[] sourceNodes = this.nodeHiddenLDA.get(source);
+//			if(sourceNodes != null) {
+//				for(int i=0; i<sourceNodes.length; i++) {
+//					features.add(sourceNodes[i]);
+//				}
+//			}
+//		}
+//			
+//		features.add(this.dnTestSimilarityLDA.weightedInDegreePlusOne(dest));	// Useful
+//			
+//		if(this.feature==2 || this.feature==3 || this.feature==4) {
+//			double[] sourceNodes2 = this.nodeHiddenLDA2.get(source);
+//			if(sourceNodes2 != null) {
+//				for(int i=0; i<sourceNodes2.length; i++) {
+//					features.add(sourceNodes2[i]);
+//				}
+//			}
+//		}
+//
+//		if(this.feature==4) {
+//			// Hidden
+//			for(int i=0; i<this.testHiddenLDA.length; i++) {
+//				features.add(this.testHiddenLDA[i]);
+//			}
+//			// Topology
+//			features.add(this.dn.inDegreePlusOne(source));
+//			features.add(this.dn.inDegreePlusOne(dest));
+//			features.add(this.dn.outDegreePlusOne(source));
+//			features.add(this.dn.outDegreePlusOne(dest));
+//			// Diffusion
+//			features.add(this.dnTrain.getOutWeightPlusOne(source, dest));
+//			features.add(this.dnTrain.getOutHrefPlusOne(source, dest));
+//			features.add(this.dnTrain.getOutImgPlusOne(source, dest));
+//		}
+
+//		if(this.feature==2 || this.feature==3) {
+//			// Similarity
+//			for(int i=0; i<this.testSimilarityLDA.length; i++) {
+//				features.add(this.testSimilarityLDA[i]);
+//			}
+//		}
+			
+//		double[] link = this.linkHiddenLDA.get(source + "," + dest);
+//		if(link != null) {
+//			for(int i=0; i<link.length; i++) {
+//				features.add(link[i]);
+//			}
+//		}
+
+//		if(this.feature==5 || this.feature==8) {
+//			Double sourceNode = this.testNodeTopicLDA.get(source);
+//			if(sourceNode != null) {
+//				features.add(sourceNode);
+//			}
+//		}
+//		if(this.feature==6 || this.feature==8) {
+//			Double destNode = this.testNodeTopicLDA.get(dest);
+//			if(destNode != null) {
+//				features.add(destNode);
+//			}
+//		}
+//		if(this.feature==7) {
+//			Double sourceNode = this.testNodeTopicLDA.get(source);
+//			Double destNode = this.testNodeTopicLDA.get(dest);
+//			if(sourceNode!=null && destNode!=null) {
+//				features.add(sourceNode*destNode);
+//			}
+//		}
+
+		// Label
+		String label = "0";
+		if(this.dnTest != null) {
+			Long edge = this.dnTest.findEdge(source, dest);
+			if(edge != null) {
+				label = "1";
+			}
+		}
+		
+		if(label.equalsIgnoreCase("0")) {
+			this.negative++;
+			this.totalNegative++;
+		}
+		else {
+			this.positive++;
+			this.totalPositive++;
+		}
+		
+		// Print
+		this.getData(pw, label, features);
+	}
+
+	public void initializeData() throws Exception {	
+    	this.dnTrain = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/dn_" + this.valid + "train_content.txt");
+    	this.dn = dnTrain;    	
+    	this.dnPattern = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/" + this.valid + "train_1_1_dn.txt");
+//    	this.dnHrefPattern = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/" + this.valid + "train_href_1_1_dn.txt");
+//    	this.dnImgPattern = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/" + this.valid + "train_img_1_1_dn.txt");
+	    	
+	   	//this.pr = new PageRank<Long, Long>(this.dn, 0.15);
+//		NodePageRankEdgeWeights nprew = new NodePageRankEdgeWeights(this.dn);
+//		this.pr = new PageRank<Long, Long>(this.dn, nprew, 0.15);
+//	   	this.pr.evaluate();
+
+//		Vector<String> sdLinkLDA = Utility.loadVector("topic/" + this.valid + "sd_link_weidong.txt");
+//	    double[][] linkLDA = Utility.loadDouble2DArray("topic/" + this.valid + "lda_link_weidong.txt");
+//	    for(int i=0; i<sdLinkLDA.size(); i++) {
+//	    	this.linkHiddenLDA.put(sdLinkLDA.get(i), linkLDA[i]);
+//	    }
+
+//	    Vector<Long> nNodeLDA = Utility.loadLongVector("topic/n_node.txt");
+//	    double[][] nodeLDA = Utility.loadDouble2DArray("topic/lda_node.txt");
+    	Vector<Long> nNodeLDA = Utility.loadLongVector("topic/" + this.valid + "n_node_weidong.txt");
+    	double[][] nodeLDA = Utility.loadDouble2DArray("topic/" + this.valid + "lda_node_weidong.txt");
+//	    Vector<Long> nNodeLDA = Utility.loadLongVector("topic/" + this.valid + "n_node_askus.txt");
+//	    double[][] nodeLDA = Utility.loadDouble2DArray("topic/" + this.valid + "lda_node_askus.txt");
+	    for(int i=0; i<nNodeLDA.size(); i++) {
+	    	this.nodeHiddenLDA.put(nNodeLDA.get(i), nodeLDA[i]);
+	    }
+
+//	    Vector<Long> nNodeLDA2 = Utility.loadLongVector("topic/n_node.txt");
+//	    double[][] nodeLDA2 = Utility.loadDouble2DArray("topic/lda_node.txt");
+	    Vector<Long> nNodeLDA2 = Utility.loadLongVector("topic/" + this.valid + "n_mr_node.txt");
+	    double[][] nodeLDA2 = Utility.loadDouble2DArray("topic/" + this.valid + "lda_mr_node.txt");
+//    	Vector<Long> nNodeLDA2 = Utility.loadLongVector("topic/" + this.valid + "n_node_weidong2.txt");
+//    	double[][] nodeLDA2 = Utility.loadDouble2DArray("topic/" + this.valid + "lda_node_weidong2.txt");
+	    for(int i=0; i<nNodeLDA2.size(); i++) {
+	    	this.nodeHiddenLDA2.put(nNodeLDA2.get(i), nodeLDA2[i]);
+	    }
+
+//		this.dnTime = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_" + this.valid + "train_time.txt");		
+	}
+	
+	public void getDataTrain() throws Exception {
+    	
+		PrintWriter pw = new PrintWriter(this.classifier + "/" + dataset + "_valid_" + instance + "_" + feature + ".libsvm");
+		if(this.instance == INSTANCE_LINK) {
+			this.dnTest = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_valid_test.txt");	// Instance = link
+			this.auTest = Utility.loadLongArray("data/plurk_iii/valid_test/aggresive_all_test.txt");
+		}
+		if(this.instance == INSTANCE_LINKTOPIC) {	// Instance = link * topic
+	    	int[] testList = Utility.loadIntegerArray("list/valid_test.txt");	// Instance = link * topic
+	    	int[] allList = Utility.loadIntegerArray("list/all.txt");	// Instance = link * topic
+	    	double[][] hiddenLDA = Utility.loadDouble2DArray("topic/lda.txt");	// Instance = link * topic
+	    	double[][] similarityLDA = Utility.loadDouble2DArray("similarity/lda.txt");	// Instance = link * topic
+			for(int concept : testList) {	// Instance = link * topic
+
+				int index = Utility.firstIndexOfIntegerArray(allList, concept);
+				this.dnTest = DiffusionNetworkFactory.getDiffusionNetwork("data/plurk_iii/valid_test/dn_" + concept + "_test.txt");	// Instance = link * topic
+				this.dnTestSimilarityLDA = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/lda/dn_valid_train_content_" + concept + ".txt");	// Instance = link * topic
+				this.auTest = Utility.loadLongArray("data/plurk_iii/valid_test/aggresive_" + concept + "_test.txt");
+				this.testSimilarityLDA = similarityLDA[index];	// Instance = link * topic
+				this.testHiddenLDA = hiddenLDA[index];	// Instance = link * topic
+				this.positive = 0;
+				this.negative = 0;
+
+//		    	this.testNodeTopicLDA = Utility.loadLongToDoubleTreeMap("nt/valid_nt_askus_" + concept + ".txt");
+//				this.testNodeTopicLDA = Utility.loadLongToDoubleTreeMap("nta/valid_nt_weidong_" + concept + ".txt");
+
+//		    	this.dnTestPattern = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/lda/dn_valid_train_content_" + concept + ".txt");
+		    	
+//				NodePageRankEdgeWeights nprew = new NodePageRankEdgeWeights(this.dnTestSimilarityLDA);
+//				this.testPrLDA = new PageRank<Long, Long>(this.dnTestSimilarityLDA, nprew, 0.15);
+//		    	this.testPrLDA.evaluate();
+
+				this.getDataTrain(pw);
+				System.out.println("Category = " + concept + ", possitive = " + this.positive + ", negative = " + this.negative);
+			}	// Instance = link * topic
+		}	// Instance = link * topic
+		else {
+			this.getDataTrain(pw);			
+		}
+		System.out.println("Total possitive = " + this.totalPositive + ", total negative = " + this.totalNegative);
+		pw.flush();
+		pw.close();
+	}
+	
+	public void getDataTrain(PrintWriter pw) throws Exception {
+		for(long e : this.dn.getEdges()) {
+			long source = this.dn.getSource(e);
+			long dest = this.dn.getDest(e);
+//			if(this.classifier.equalsIgnoreCase("libsvm")) {
+//				Long edge = this.dnTest.findEdge(source, dest);	// One class
+//				if(edge != null) {	// One class
+//					this.getData(pw, source, dest);
+//				}	// One class
+//			}	// One class
+//			else {
+				for(int i=0; i<this.auTest.length; i++) {	// Candidate only
+					if(this.auTest[i] == source) {	// Candidate only
+						this.getData(pw, source, dest);
+						break;	// Candidate only
+					}	// Candidate only
+				}	// Candidate only
+//			}
+		}
+	}
+
+	public Vector<String> getDataTest(int concept, long[] aggresives) throws Exception {
+
+		Vector<String> sd = new Vector<String>();
+    	PrintWriter pw = new PrintWriter(this.classifier + "/" + dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + ".libsvm");
+		//PrintWriter sd = new PrintWriter(this.classifier + "/" + dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_source_dest.libsvm");
+    	int[] allList = Utility.loadIntegerArray("list/all.txt");	// Instance = link * topic
+		double[][] similarityLDA = Utility.loadDouble2DArray("similarity/lda.txt");	// Instance = link * topic
+		double[][] hiddenLDA = Utility.loadDouble2DArray("topic/lda.txt");	// Instance = link * topic
+		if(this.instance == INSTANCE_LINKTOPIC) {	// Instance = link * topic
+			
+			int index = Utility.firstIndexOfIntegerArray(allList, concept);
+			this.dnTestSimilarityLDA = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/lda/dn_" + this.valid + "train_content_" + concept + ".txt");	// Instance = link * topic
+			this.testSimilarityLDA = similarityLDA[index];	// Instance = link * topic
+			this.testHiddenLDA = hiddenLDA[index];	// Instance = link * topic
+
+//	    	this.testNodeTopicLDA = Utility.loadLongToDoubleTreeMap("nt/" + this.valid + "nt_askus_" + concept + ".txt");
+//	    	this.testNodeTopicLDA = Utility.loadLongToDoubleTreeMap("nta/" + this.valid + "nt_weidong_" + concept + ".txt");
+
+//	    	this.dnTestPattern = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/lda/dn_" + this.valid + "train_content_" + concept + ".txt");
+
+//			NodePageRankEdgeWeights nprew = new NodePageRankEdgeWeights(this.dnTestSimilarityLDA);
+//			this.testPrLDA = new PageRank<Long, Long>(this.dnTestSimilarityLDA, nprew, 0.15);
+//	    	this.testPrLDA.evaluate();
+
+		}
+		for(long source : aggresives) {
+			for(long e : this.dn.getOutEdges(source)) {
+				long dest = this.dn.getDest(e);
+				sd.add(source + "," + dest);
+				//sd.println(source + "," + dest);
+				this.getData(pw, source, dest);
+			}
+		}
+		pw.flush();
+		pw.close();
+		//sd.flush();
+		//sd.close();
+		Utility.saveVector(this.classifier + "/" + dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_source_dest.libsvm", sd);
+		return sd;
+	}
+
+	public void getData(PrintWriter pw, String label, Vector<Double> features) throws Exception {
+		pw.print(label);
+		for(int i=0; i<features.size(); i++) {
+			double feature = features.get(i);
+			pw.print(" " + (i+1) + ":" + feature);
+		}
+		pw.println();
+	}
+
+	public void scaleDataTrain() throws Exception {
+		this.scaleData("valid_");
+	}
+	
+	public void scaleDataTest(int concept) throws Exception {
+		this.scaleData(this.valid + Integer.toString(concept) + "_");
+	}
+
+	public void scaleData(String s) throws Exception {
+			
+		// Scale parameters
+		String input = this.classifier + "/" + dataset + "_" + s + instance + "_" + feature + ".libsvm";
+		String output = this.classifier + "/" + dataset + "_" + s + instance + "_" + feature + "_scaled.libsvm";
+
+		String parameters[] = {"-l", "0", "-u", "1", input};
+
+		// Redirect System.out
+		PrintStream so = System.out;
+		FileOutputStream fos = new FileOutputStream(output);
+		PrintStream ps = new PrintStream(fos);
+		System.setOut(ps);
+
+		// Scale
+		if(this.classifier.equalsIgnoreCase("libsvm")) {
+			LibSVMScale.main(parameters);
+		}
+		else {
+			LibLinearScale.main(parameters);
+		}
+		
+		// Reset System.out
+		System.setOut(so);
+		ps.flush();
+		ps.close();
+		fos.flush();
+		fos.close();
+	}
+
+	public void trainSVM(String s, String t, String c, String h, String d, String n) throws Exception {
+		String input = this.classifier + "/" + dataset + "_valid_" + instance + "_" + feature + "_scaled.libsvm";
+		String model = this.classifier + "/" + dataset + "_valid_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled.model";
+		String parameters[] = {"-s", s, "-t", t, "-c", c, "-h", h, "-d", d, "-n", n, input, model};
+		LibSVMTrain.main(parameters);
+	}
+
+	public void trainLinear(String s, String c, String b, String e, String w) throws Exception {
+		String input = this.classifier + "/" + dataset + "_valid_" + instance + "_" + feature + "_scaled.libsvm";
+		String model = this.classifier + "/" + dataset + "_valid_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled.model";
+		String parameters[] = {"-s", s, "-c", c, "-B", b, "-e", e, "-w1", w, input, model};
+		Train.main(parameters);
+	}
+
+	public void test(int concept, Vector<String> sd) throws Exception {
+		String input = this.classifier + "/" + dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_scaled.libsvm";
+		String model = this.classifier + "/" + dataset + "_valid_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled.model";
+		String output = this.classifier + "/" + dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled.txt";
+		String decisionValueOutput = this.classifier + "/" + dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled_dv.txt";
+		String[] parameters = {input, model, output};
+		if(this.classifier.equalsIgnoreCase("libsvm")) {
+			LibSVMPredict.setDecisionValueFileName(decisionValueOutput);
+			LibSVMPredict.main(parameters);
+		}
+		else {
+			Predict.setDecisionValueFileName(decisionValueOutput);
+			Predict.main(parameters);
+		}
+		//Vector<String> sd = Utility.loadVector(this.classifier + "/" + dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_source_dest.libsvm");
+		Vector<String> dv = Utility.loadVector(decisionValueOutput);
+		PrintWriter pw = new PrintWriter(this.classifier + "/" + dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled_dn.txt");
+		for(int i=0; i<sd.size(); i++) {
+			String[] t = sd.get(i).split(",");
+			pw.print(t[0] + "\t" + t[1]);
+			pw.println("\t" + dv.get(i));
+		}
+		pw.flush();
+		pw.close();
+	}
+
+	public void prepareDataTrain() throws Exception {
+		this.getDataTrain();
+		this.scaleDataTrain();
+	}
+	
+	public Vector<String> prepareDataTest(int concept, long[] aggresives) throws Exception {
+		Vector<String> sd = this.getDataTest(concept, aggresives);
+		this.scaleDataTest(concept);
+		return sd;
+	}	
+}

@@ -1,0 +1,21 @@
+import java.util.*;
+
+public class Main_LibSVM {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Main
+		Main_LibSVMData.main(args);
+		Main_LibSVMTrain.main(args);
+		Main_Predictor.main(args);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed minutes = " + elapsedTime/60000);
+	}
+}

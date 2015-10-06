@@ -1,0 +1,36 @@
+package predictor;
+
+import java.util.Vector;
+
+import network.*;
+
+public class InterAggressiveUserPredictor extends DoNothingPredictor {
+		
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+
+		// Select all possible links among aggressive users
+		for(long uid1 : aggresives) {
+			Vector<Long> candidates = getCandidates(uid1);
+			for(long uid2 : candidates) {
+				boolean isAggresive = false;
+				for(long u : aggresives) {
+					if(u == uid2) {
+						isAggresive = true;
+						break;
+					}
+				}
+				if(isAggresive && dn.findEdge(uid1, uid2)!=null) {
+					result = this.activate(result, uid1, uid2, true, 1.0);
+				}
+				else {
+					result = this.activate(result, uid1, uid2, false, 0.0);
+				}			
+			}			
+		}		
+		return result;
+	}
+
+	public InterAggressiveUserPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+}

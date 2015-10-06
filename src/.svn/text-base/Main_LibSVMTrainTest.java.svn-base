@@ -1,0 +1,20 @@
+import java.util.*;
+
+public class Main_LibSVMTrainTest {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Main
+		Main_LibSVMTrain.main(args);
+		Main_Predictor.main(args);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

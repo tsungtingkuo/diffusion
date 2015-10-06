@@ -1,0 +1,47 @@
+import java.util.*;
+import network.*;
+
+public class Main_CleanResponse {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Dataset
+		//String dataset = "plurk";
+		String dataset = "facebook";
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Concept ID
+		int conceptId = 31;
+		//int conceptId = 69;
+		//int conceptId = 102;
+		
+		// Load user
+		Network n = new Network();
+		//NetworkFactory.loadUser(false, n, "data/user_table");
+		NetworkFactory.loadUser(true, n, "data/" + dataset + "_iii/user_" + dataset + ".txt");
+		System.out.println("User = " + n.getUserCount());
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load response
+		ResponseManager rm = new ResponseManager("data/" + dataset + "_iii/response_concept" + conceptId + "_" + dataset + ".txt", encoding);
+		System.out.println("Count = " + rm.getResponsesCount());
+
+		// Clean response
+		//ResponseManager.cleanResponse(n, "data/response", "data/response_cleaned");
+		ResponseManager.cleanResponse(true, n, "data/" + dataset + "_iii/response_concept" + conceptId + "_" + dataset + ".txt", "data/" + dataset + "_iii/response_concept" + conceptId + "_" + dataset + "_cleaned.txt", encoding);
+
+		// Load cleaned
+		ResponseManager rmc = new ResponseManager("data/" + dataset + "_iii/response_concept" + conceptId + "_" + dataset + "_cleaned.txt", encoding);
+		System.out.println("Cleaned = " + rmc.getResponsesCount());
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

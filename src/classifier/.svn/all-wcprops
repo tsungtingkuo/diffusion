@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/ppp/!svn/ver/376/ppp/src/classifier
+END
+MyLibSVM.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/ppp/!svn/ver/315/ppp/src/classifier/MyLibSVM.java
+END
+MyClassifierCV.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/ppp/!svn/ver/376/ppp/src/classifier/MyClassifierCV.java
+END
+LibSVMScale.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/286/ppp/src/classifier/LibSVMScale.java
+END
+LibSVMPredict.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/ppp/!svn/ver/157/ppp/src/classifier/LibSVMPredict.java
+END
+LibLinearScale.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/ppp/!svn/ver/269/ppp/src/classifier/LibLinearScale.java
+END
+LibSVMTrain.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/61/ppp/src/classifier/LibSVMTrain.java
+END
