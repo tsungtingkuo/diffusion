@@ -1,0 +1,132 @@
+package predictor;
+
+import java.util.Vector;
+
+import classifier.*;
+import network.*;
+
+public class LibSVMGuidedKNeighborsPredictor extends GuidedKNeighborsPredictor {
+	
+	String dataset = "";
+	String classifier = "";
+	String valid = "";
+	String w = "1";
+	String c = "1";
+	int instance = MyLibSVM.INSTANCE_UNKNOWN;
+	int feature = 0;
+	MyLibSVM svm = null;
+	
+	public void initializeSVM() throws Exception {
+		this.svm = new MyLibSVM(this.dataset, this.classifier, this.valid, this.instance, this.feature, this.w, this.c);
+		this.svm.initializeData();
+	}
+	
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+		Vector<String> sd = this.svm.prepareDataTest(concept, aggresives);
+		this.svm.test(concept, sd);
+		this.dnt = DiffusionNetworkFactory.getDiffusionNetwork(this.classifier + "/" + this.dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled_dn.txt");
+		return predictGuided(result, concept, aggresives);
+	}
+
+	public LibSVMGuidedKNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+
+	/**
+	 * @return the valid
+	 */
+	public String getValid() {
+		return valid;
+	}
+
+	/**
+	 * @param valid the valid to set
+	 */
+	public void setValid(String valid) {
+		this.valid = valid;
+	}
+
+	/**
+	 * @return the dataset
+	 */
+	public String getDataset() {
+		return dataset;
+	}
+
+	/**
+	 * @param dataset the dataset to set
+	 */
+	public void setDataset(String dataset) {
+		this.dataset = dataset;
+	}
+
+	/**
+	 * @return the classifier
+	 */
+	public String getClassifier() {
+		return classifier;
+	}
+
+	/**
+	 * @param classifier the classifier to set
+	 */
+	public void setClassifier(String classifier) {
+		this.classifier = classifier;
+	}
+
+	/**
+	 * @return the instance
+	 */
+	public int getInstance() {
+		return instance;
+	}
+
+	/**
+	 * @param instance the instance to set
+	 */
+	public void setInstance(int instance) {
+		this.instance = instance;
+	}
+
+	/**
+	 * @return the feature
+	 */
+	public int getFeature() {
+		return feature;
+	}
+
+	/**
+	 * @param feature the feature to set
+	 */
+	public void setFeature(int feature) {
+		this.feature = feature;
+	}
+
+	/**
+	 * @return the w
+	 */
+	public String getW() {
+		return w;
+	}
+
+	/**
+	 * @param w the w to set
+	 */
+	public void setW(String w) {
+		this.w = w;
+	}
+
+	/**
+	 * @return the c
+	 */
+	public String getC() {
+		return c;
+	}
+
+	/**
+	 * @param c the c to set
+	 */
+	public void setC(String c) {
+		this.c = c;
+	}
+}

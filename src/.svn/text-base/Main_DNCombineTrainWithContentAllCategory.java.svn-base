@@ -1,0 +1,42 @@
+import java.util.*;
+
+import utility.Utility;
+import network.*;
+
+public class Main_DNCombineTrainWithContentAllCategory {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		if(args.length > 0) {
+			valid = "valid_";
+		}
+
+		// File names
+		String trainListFileName = "list/" + valid + "train.txt";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Category
+		TreeMap<Integer, Integer> topicToCategory = Utility.loadIntegerToIntegerTreeMap("list/all_category.txt");
+		int categoryNumber = 7;
+
+		// Combine diffusion networks
+		String trainPrefix = "data/plurk_iii/" + valid + "train/dn_";
+		String trainPostfix = "_train.txt";
+		int[] trainList = Utility.loadIntegerArray(trainListFileName);
+    	for(int i=1; i<=categoryNumber; i++) {
+    		DiffusionNetwork trainDN = DiffusionNetworkFactory.combineDiffusionNetworkAllWithContentCategory(trainPrefix, trainPostfix, trainList, topicToCategory, i);
+    		DiffusionNetworkFactory.saveDiffusionNetworkWithContent(trainDN, "dna/dn_" + valid + "train_content_" + i + ".txt");
+    	}
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

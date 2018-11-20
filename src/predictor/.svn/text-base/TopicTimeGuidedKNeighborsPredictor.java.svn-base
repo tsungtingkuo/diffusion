@@ -1,0 +1,26 @@
+package predictor;
+
+import java.util.*;
+import utility.*;
+import network.*;
+
+public class TopicTimeGuidedKNeighborsPredictor extends TopicGuidedKNeighborsPredictor {
+	
+	DiffusionNetwork dnTime = null;
+
+	public TreeMap<Long, Double> selectTopK(Vector<Long> candidates, long sourceId, int k) {
+		TreeMap<Long, Double> tm = new TreeMap<Long, Double>();
+		for(long id : candidates) {
+			double weight = this.dnt.getOutWeightPlusOne(sourceId, id);
+			double time = this.dnTime.getOutWeightPlusOne(sourceId, id);
+			double value = weight * time;
+			tm.put(id, value);
+		}
+		return Utility.getTopValuedLongToDoubleTreeMap(tm, k, true);
+	}
+
+	public TopicTimeGuidedKNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+		this.dnTime = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_" + this.valid + "train_time.txt");		
+	}
+}

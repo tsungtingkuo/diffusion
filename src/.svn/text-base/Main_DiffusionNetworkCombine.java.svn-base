@@ -1,0 +1,43 @@
+import java.util.*;
+import network.*;
+
+public class Main_DiffusionNetworkCombine {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Concepts
+		int concept1 = 41;
+		int concept2 = 29;
+		int newConcept = 121;
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Combine diffusion networks
+		String fileName1 = "dn/diffusion_network_plurk_iii_concept" + concept1 + ".txt";
+		String fileName2 = "dn/diffusion_network_plurk_iii_concept" + concept2 + ".txt";
+		String diffusionFileName = "dn/diffusion_network_plurk_iii_concept" + newConcept + ".txt";
+		DiffusionNetwork dn = DiffusionNetworkFactory.combineDiffusionNetwork(fileName1, fileName2);
+		DiffusionNetworkFactory.saveDiffusionNetwork(dn, diffusionFileName);
+		
+		// Load diffusion network
+		dn = DiffusionNetworkFactory.getDiffusionNetwork(diffusionFileName);
+		System.out.println("Vertex = " + dn.getVertexCount());
+		System.out.println("Edge = " + dn.getEdgeCount());
+		
+		// Connected component
+		Vector<Integer> sizes = new Vector<Integer>();
+		Set<Set<Long>> connectedComponents = Statistics.getConnectedComponent(dn);
+		for(Set<Long> component : connectedComponents) {
+			sizes.add(component.size());
+		}
+		TreeSet<Integer> ts = new TreeSet<Integer>(sizes);
+		System.out.println("GCC = " + ts.last());
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

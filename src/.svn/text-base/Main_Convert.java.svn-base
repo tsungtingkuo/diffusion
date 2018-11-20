@@ -1,0 +1,118 @@
+import converter.*;
+
+public class Main_Convert {
+	
+	public static void main(String[] args) throws Exception {
+
+//		NodeHiddenAskus.convert("askus/lsa.m.Uh.test.table.csv", "_askus", "");
+//		NodeHiddenAskus.convert("askus/lsa.m.Uh.valid.table.csv", "_askus", "valid_");
+
+//		NodeHiddenAskus.convert("askus/lsa.m_r.Uh.test.table.csv", "_askus", "");
+//		NodeHiddenAskus.convert("askus/lsa.m_r.Uh.valid.table.csv", "_askus", "valid_");
+
+//		NodeHiddenAskus.convert("askus/mf.m.Uh.test.table.csv", "_askus", "");
+//		NodeHiddenAskus.convert("askus/mf.m.Uh.valid.table.csv", "_askus", "valid_");
+
+//		NodeHiddenAskus.convert("askus/mf.m_r.Uh.test.table.csv", "_askus", "");
+//		NodeHiddenAskus.convert("askus/mf.m_r.Uh.valid.table.csv", "_askus", "valid_");
+
+//		TopicHiddenWeiDong.convert("weidong/train_topic_hidden.table", "weidong/test_topic_hidden.table", "_weidong");
+
+//		LinkHiddenWeidong.convert("weidong/path_hidden_train_m.table", "_weidong", "");
+//		LinkHiddenWeidong.convert("weidong/path_hidden_valid_train_m.table", "_weidong", "valid_");
+
+//		LinkHiddenWeidong.convert("weidong/path_hidden_train_mr.table", "_weidong", "");
+//		LinkHiddenWeidong.convert("weidong/path_hidden_valid_train_mr.table", "_weidong", "valid_");
+
+//		LinkHiddenWeidong.convert("weidong/path_hidden_train_test_m.table", "_weidong", "");
+//		LinkHiddenWeidong.convert("weidong/path_hidden_valid_train_test_m.table", "_weidong", "valid_");
+
+//		LinkHiddenWeidong.convert("weidong/path_hidden_train_test_mr.table", "_weidong", "");
+//		LinkHiddenWeidong.convert("weidong/path_hidden_valid_train_test_mr.table", "_weidong", "valid_");
+
+//		NodeHiddenWeidong.convert("weidong/user_hidden_train_m.table", "_weidong", "");
+//		NodeHiddenWeidong.convert("weidong/user_hidden_valid_train_m.table", "_weidong", "valid_");
+
+//		NodeHiddenWeidong.convert("weidong/user_hidden_train_mr.table", "_weidong", "");
+//		NodeHiddenWeidong.convert("weidong/user_hidden_valid_train_mr.table", "_weidong", "valid_");
+
+//		NodeHiddenWeidong.convert("weidong/user_hidden_train_test_m.table", "_weidong", "");
+//		NodeHiddenWeidong.convert("weidong/user_hidden_valid_train_test_m.table", "_weidong", "valid_");
+
+		NodeHiddenWeidong.convert("weidong/user_hidden_train_test_mr.table", "_weidong", "");
+//		NodeHiddenWeidong.convert("weidong/user_hidden_valid_train_test_mr.table", "_weidong", "valid_");
+
+//		NodeTopicAskus.convert("askus/interword_feature.m.test.txt", "_askus", "");
+//		NodeTopicAskus.convert("askus/interword_feature.m.valid_test.txt", "_askus", "valid_");
+
+//		NodeTopicAskus.convert("askus/interword_feature.m_r.test.txt", "_askus", "");
+//		NodeTopicAskus.convert("askus/interword_feature.m_r.valid_test.txt", "_askus", "valid_");
+
+//		LinkHiddenWordWeidong.convert("weidong/path_hidden.word_train_r.table", "_weidong", "");
+//		LinkHiddenWordWeidong.convert("weidong/path_hidden.word_valid_train_r.table", "_weidong", "valid_");
+
+//		LinkHiddenWordWeidong.convert("weidong/path_hidden.word_train_test_r.table", "_weidong", "");
+//		LinkHiddenWordWeidong.convert("weidong/path_hidden.word_valid_train_test_r.table", "_weidong", "valid_");
+
+//		NodeHiddenWordWeidong.convert("weidong/user_hidden.word_train_m.table", "_weidong", "");
+//		NodeHiddenWordWeidong.convert("weidong/user_hidden.word_valid_train_m.table", "_weidong", "valid_");
+
+//		NodeHiddenWordWeidong.convert("weidong/user_hidden.word_train_mr.table", "_weidong", "");
+//		NodeHiddenWordWeidong.convert("weidong/user_hidden.word_valid_train_mr.table", "_weidong", "valid_");
+
+//		NodeHiddenWordWeidong.convert("weidong/user_hidden.word_train_test_m.table", "_weidong", "");
+//		NodeHiddenWordWeidong.convert("weidong/user_hidden.word_valid_train_test_m.table", "_weidong", "valid_");
+
+//		NodeHiddenWordWeidong.convert("weidong/user_hidden.word_train_test_mr.table", "_weidong", "");
+//		NodeHiddenWordWeidong.convert("weidong/user_hidden.word_valid_train_test_mr.table", "_weidong", "valid_");
+
+//		NodeTopicAskus.convert("askus/hidden_topic_TU.lsa.m.test.txt", "_askus", "");
+//		NodeTopicAskus.convert("askus/hidden_topic_TU.lsa.m.valid_test.txt", "_askus", "valid_");
+
+//		NodeTopicAskus.convert("askus/hidden_topic_TU.lsa.m_r.test.txt", "_askus", "");
+//		NodeTopicAskus.convert("askus/hidden_topic_TU.lsa.m_r.valid_test.txt", "_askus", "valid_");
+
+//		NodeTopicWeidong.convert("weidong/train_mesres_user_topic.table", "_weidong", "");
+//		NodeTopicWeidong.convert("weidong/valid_train_mesres_user_topic.table", "_weidong", "valid_");
+
+//		NodeTopicWeidong.convert("weidong/all_mesres_user_topic.table", "_weidong", "");
+//		NodeTopicWeidong.convert("weidong/valid_all_mesres_user_topic.table", "_weidong", "valid_");
+		
+//		NodeHiddenWordFixedWeidong.convert("weidong/all_mesres_user_hidden.devision.word.table", "_weidong", "");
+//		NodeHiddenWordFixedWeidong.convert("weidong/valid_all_mesres_user_hidden.devision.word.table", "_weidong", "valid_");
+	
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv1_ori.list", "_weidong_cv1", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv2_ori.list", "_weidong_cv2", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv3_ori.list", "_weidong_cv3", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv4_ori.list", "_weidong_cv4", "");
+
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv1_zero.list", "_weidong_cv1", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv2_zero.list", "_weidong_cv2", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv3_zero.list", "_weidong_cv3", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv4_zero.list", "_weidong_cv4", "");
+
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv1_ub.list", "_weidong_cv1", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv2_ub.list", "_weidong_cv2", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv3_ub.list", "_weidong_cv3", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv4_ub.list", "_weidong_cv4", "");
+
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv1_tb.list", "_weidong_cv1", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv2_tb.list", "_weidong_cv2", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv3_tb.list", "_weidong_cv3", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv4_tb.list", "_weidong_cv4", "");
+
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv1_ub_tb.list", "_weidong_cv1", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv2_ub_tb.list", "_weidong_cv2", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv3_ub_tb.list", "_weidong_cv3", "");
+//		NodeHiddenWeidong.convert("weidong/UPLC_cv4_ub_tb.list", "_weidong_cv4", "");
+
+//		NodeHiddenWeidong.convert("weidong/TU_train_cv1.list", "_weidong_train_cv1", "");
+//		NodeHiddenWeidong.convert("weidong/TU_train_cv2.list", "_weidong_train_cv2", "");
+//		NodeHiddenWeidong.convert("weidong/TU_train_cv3.list", "_weidong_train_cv3", "");
+//		NodeHiddenWeidong.convert("weidong/TU_train_cv4.list", "_weidong_train_cv4", "");
+//		NodeHiddenWeidong.convert("weidong/TU_test_cv1.list", "_weidong_test_cv1", "");
+//		NodeHiddenWeidong.convert("weidong/TU_test_cv2.list", "_weidong_test_cv2", "");
+//		NodeHiddenWeidong.convert("weidong/TU_test_cv3.list", "_weidong_test_cv3", "");
+//		NodeHiddenWeidong.convert("weidong/TU_test_cv4.list", "_weidong_test_cv4", "");
+	}	
+}

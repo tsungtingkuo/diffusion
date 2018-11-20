@@ -1,0 +1,88 @@
+import java.util.Date;
+import java.util.Formatter;
+/**
+ * The file is modified from Main_ClassifierCV.java
+ * */
+
+public class Main_BaselineCV {
+
+	static String result = "";
+	
+	public static void main(String[] args) throws Exception {
+		
+		int folders = 4;
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Main
+		result = "";
+		
+		int t = 0;
+		int f = 0;
+		double accuracy = 0.0;
+		
+		int tSum = 0;
+		int fSum = 0;
+		double accuracyAll = 0.0;
+		
+		String[] as = new String[folders];
+		String[] wiki = new String[folders];
+		
+		String feature = "|" + args[2] + "|";
+		for(int i=0; i<args[1].length(); i++) {
+			feature += args[1].charAt(i);
+			feature += "|";
+		}		
+
+		for(int fold=0; fold<folders; fold++) {
+			
+			// Main
+			String[] a = {args[0], args[1], args[2], Integer.toString(fold+1)};
+			//Main_ClassifierDataCV.main(a);
+			//Main_ClassifierTrainCV.main(a);
+			//Main_PredictorCV.main(a);
+			Main_BaselineDiffusionModelCV.main(a);
+			
+			// Accuracy
+			accuracy = Main_PredictorCV.getAccuracyAll();
+			t = Main_PredictorCV.gettSum();
+			f = Main_PredictorCV.getfSum();
+			tSum += t;
+			fSum += f;
+			Formatter fm = new Formatter();
+			as[fold] = fm.format("%.2f%%", accuracy*100).toString();
+			wiki[fold] = feature + (fold+1) + "|" + t + "|" + f + "|" + as[fold] + "|";
+			System.out.println(wiki[fold]);
+		}
+		
+		System.out.println();
+		for(int fold=0; fold<folders; fold++) {
+			System.out.println(wiki[fold]);
+		}
+		
+		System.out.println();
+		accuracyAll = (double)tSum / (double)(tSum + fSum);
+		Formatter a = new Formatter();
+		a.format("%.2f%%", accuracyAll*100);
+		result += feature;
+		for(int fold=0; fold<folders; fold++) {
+			result += (as[fold] + "|");
+		}
+		result += (a + "|");
+		System.out.println(result);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed minutes = " + elapsedTime/60000);
+	}
+
+	/**
+	 * @return the result
+	 */
+	public static String getResult() {
+		return result;
+	}
+}

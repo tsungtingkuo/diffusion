@@ -1,0 +1,55 @@
+import java.io.*;
+import java.util.*;
+import network.*;
+
+public class Main_DiffusionNetworkWithTestAll {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		PrintWriter pw = new PrintWriter("diffusion_network_statistics_all.csv");
+		String dirName = "data/plurk_iii";
+		for(int i=1; i<=120; i++) {
+			String messageFileName = dirName + "/message_concept" + i + "_plurk_cleaned.txt";
+			String responseFileName = dirName + "/response_concept" + i + "_plurk_cleaned.txt";
+			String diffusionFileName = "dna/diffusion_network_plurk_iii_concept" + i + ".txt";
+		
+			File f = new File(messageFileName);
+			if(f.exists()) {		
+			
+				// Diffusion network
+				MessageManager mm = new MessageManager(messageFileName, encoding);
+				ResponseManager rm = new ResponseManager(responseFileName, encoding);
+				DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork(mm, rm);
+				DiffusionNetworkFactory.saveDiffusionNetwork(dn, diffusionFileName);
+					
+				// Connected component
+				Vector<Integer> sizes = new Vector<Integer>();
+				Set<Set<Long>> connectedComponents = Statistics.getConnectedComponent(dn);
+				for(Set<Long> component : connectedComponents) {
+					sizes.add(component.size());
+				}
+				TreeSet<Integer> ts = new TreeSet<Integer>(sizes);
+		
+				System.out.println("Concept = " + i + ", vertex = " + dn.getVertexCount() + ", edge = " + dn.getEdgeCount() + ", gcc = " + ts.last());
+				pw.println(i + "," + dn.getVertexCount() + "," + dn.getEdgeCount() + "," + ts.last());
+			}
+			else {
+				pw.println(i + ",0,0,0");
+			}
+		}
+		pw.flush();
+		pw.close();
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

@@ -1,0 +1,45 @@
+import java.util.*;
+
+public class Main_PrepareData {
+
+	public static void prepare(String[] a) throws Exception {
+		
+		//Main_SplitTrainData.main(a);	// This step is slow
+		Main_SortTrainData.main(a);
+		Main_TrainDataDN.main(a);
+		Main_TrainDataAggresive.main(a);
+		Main_DNCombineTrainAll.main(a);
+		Main_DNCombineTrainWithContentAll.main(a);
+
+		//Main_SplitTestData.main(a);	// This step is slow
+		Main_SortTestData.main(a);
+		Main_TestDataDN.main(a);
+		Main_TestDataAggresive.main(a);
+		Main_DNCombineTestAllWithTrain.main(a);
+		Main_DNClearWeight.main(a);
+		
+		Main_DNCombineTrainWithContentAllSimilarity.main(a);
+		
+	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Prepare data
+		String[] a = {};
+		Main_PrepareData.prepare(a);
+		
+		// Prepare validation data
+		a = new String[1];
+		a[0] = "valid_";
+		Main_PrepareData.prepare(a);
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

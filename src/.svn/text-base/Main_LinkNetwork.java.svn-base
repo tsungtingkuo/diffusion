@@ -1,0 +1,37 @@
+import java.util.*;
+import network.*;
+
+public class Main_LinkNetwork {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load diffusion network
+		//DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_train_test_unweighted.txt");
+		DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_valid_train_test_unweighted.txt");
+		
+		// Get link network
+		LinkNetwork ln = LinkNetworkFactory.getLinkNetwork(dn);
+		//LinkNetworkFactory.saveDiffusionNetwork(ln, "ln/ln_train_test_unweighted.txt");
+		LinkNetworkFactory.saveDiffusionNetwork(ln, "ln/ln_valid_train_test_unweighted.txt");
+		System.out.println("Vertex = " + ln.getVertexCount());
+		System.out.println("Edge = " + ln.getEdgeCount());
+		
+		// Connected component
+		Vector<Integer> sizes = new Vector<Integer>();
+		Set<Set<Long>> connectedComponents = Statistics.getConnectedComponent(ln);
+		for(Set<Long> component : connectedComponents) {
+			sizes.add(component.size());
+		}
+		TreeSet<Integer> ts = new TreeSet<Integer>(sizes);
+		System.out.println("GCC = " + ts.last());
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

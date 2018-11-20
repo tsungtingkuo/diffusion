@@ -1,0 +1,30 @@
+import java.util.*;
+import utility.*;
+
+public class Main_Peak {
+
+	public static void main(String[] args) throws Exception {
+				
+		// File names
+    	String countFile = "Date_Count_III_v3_1030_MR_100.csv";
+    	String idFile = "list/all.txt";
+    	
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Identify peaks
+		int[] ids = Utility.loadIntegerArray(idFile);
+		int[][] counts = Utility.loadInteger2DArray(countFile);
+		TreeMap<Integer, Integer> tm = new TreeMap<Integer, Integer>(); 
+		for(int i=0; i<ids.length; i++) {
+			tm.put(ids[i], Utility.getMaxIndex(counts[i]));
+		}
+		Utility.saveIntegerToIntegerTreeMap(tm, "peak.csv");
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

@@ -1,0 +1,59 @@
+import java.io.*;
+import java.util.*;
+
+import utility.*;
+
+public class Main_TestDataAggresive {
+
+	public static void main(String[] args) throws Exception {
+				
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		if(args.length > 0) {
+			valid = "valid_";
+		}
+
+		// File names
+    	String listFileName = "list/" + valid + "test.txt";
+    	
+		// Dataset
+		String dataset = "plurk";
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Split data
+    	int[] concepts = Utility.loadIntegerArray(listFileName);
+    	TreeSet<String> allSeeds = new TreeSet<String>();
+    	for(int concept : concepts) {
+    		System.out.print("Identifying concept " + concept + " ... ");
+    		TreeSet<String> seeds = new TreeSet<String>();
+    		String[] dn = Utility.loadStringArray("data/" + dataset + "_iii/" + valid + "test/dn_" + concept + "_test.txt");
+    		for(String d : dn) {
+    			String[] t = d.split("\t");
+    			seeds.add(t[0]);
+    			allSeeds.add(t[0]);
+    		}
+    		PrintWriter pw = new PrintWriter("data/" + dataset + "_iii/" + valid + "test/aggresive_" + concept + "_test.txt");
+    		for(String s : seeds) {
+    			pw.println(s);
+    		}
+    		pw.flush();
+    		pw.close();
+    		System.out.println("done.");
+    	}
+		PrintWriter pw = new PrintWriter("data/" + dataset + "_iii/" + valid + "test/aggresive_all_test.txt");
+		for(String s : allSeeds) {
+			pw.println(s);
+		}
+		pw.flush();
+		pw.close();
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

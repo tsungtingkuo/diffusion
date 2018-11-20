@@ -1,0 +1,62 @@
+
+import ij.measure.*;
+import fitter.*;
+import utility.*;
+
+public class Main_DiffusionNumber{
+	public static void main( String[] argv ) throws Exception{
+		double[] yTrain = Utility.loadDoubleArray("number/y_all_train.txt");
+		MaxPlusOneFitter mpof = new MaxPlusOneFitter(yTrain, CurveFitter.RODBARD);
+		double yTrainPredictSum = mpof.predictTrain();
+		System.out.println(yTrainPredictSum);		
+		double yTestPredictSum = mpof.predictTest(34);
+		System.out.println(yTestPredictSum);		
+		
+		// Load data
+//		double[] yTrain = Utility.loadDoubleArray("number/y_all_train.txt");
+//		
+//		// Find max point to get later part of data
+//		int maxIndex = Utility.getMaxIndex(yTrain);
+//		System.out.println(maxIndex);
+//		double[] x = new double[yTrain.length - maxIndex];
+//		double[] y = new double[yTrain.length - maxIndex];
+//		for(int i=0; i<x.length; i++) {
+//			x[i] = i + 1; 
+//			y[i] = yTrain[i + maxIndex]; 
+//		}
+//		Utility.saveDoubleArray("number/x_all_train_part.txt", x);
+//		Utility.saveDoubleArray("number/y_all_train_part.txt", y);
+//		
+//		// Power curve fitting
+//		CurveFitter cf = new CurveFitter(x, y);
+//		cf.doFit(CurveFitter.POWER);
+//		double a = cf.getParams()[0];
+//		double b = cf.getParams()[1];
+//		System.out.println(cf.getResultString());
+//		
+//		// Excel curve fitting
+//		a = 125275;
+//		b = -1.368;
+//		System.out.println();
+//		System.out.println("y = " + a + "x^" + b);
+//		
+//		// Estimate diffusion number (test)
+//		double[] xTest = Utility.loadDoubleArray("number/x_all_test.txt");
+//		double[] xTestPredict = new double[xTest.length];
+//		double[] yTestPredict = new double[xTest.length];
+//		for(int j=0; j<xTest.length; j++) {
+//			xTestPredict[j] = xTest[j]-maxIndex;
+//			yTestPredict[j] = a * Math.pow(xTest[j]-maxIndex, b);
+//		}
+//		Utility.saveDoubleArray("number/x_all_test_predict.txt", xTestPredict);
+//		Utility.saveDoubleArray("number/y_all_test_predict.txt", yTestPredict);
+//
+//		// Estimate diffusion number (train_part)
+//		double[] yPredict = new double[xTest.length];
+//		for(int i=0; i<x.length; i++) {
+//			yPredict[i] = a * Math.pow(x[i], b);
+//		}
+//		Utility.saveDoubleArray("number/x_all_train_predict.txt", x);
+//		Utility.saveDoubleArray("number/y_all_train_predict.txt", yPredict);
+	}
+}

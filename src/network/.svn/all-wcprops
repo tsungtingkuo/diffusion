@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/ppp/!svn/ver/354/ppp/src/network
+END
+LinkNetworkFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/ppp/!svn/ver/85/ppp/src/network/LinkNetworkFactory.java
+END
+DiffusionNetwork.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/ppp/!svn/ver/213/ppp/src/network/DiffusionNetwork.java
+END
+CascadesManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/ppp/!svn/ver/261/ppp/src/network/CascadesManager.java
+END
+RelationFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/1/ppp/src/network/RelationFactory.java
+END
+UserFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/ppp/!svn/ver/1/ppp/src/network/UserFactory.java
+END
+LinkNetwork.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/ppp/!svn/ver/84/ppp/src/network/LinkNetwork.java
+END
+MessageFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/ppp/!svn/ver/1/ppp/src/network/MessageFactory.java
+END
+Relation.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/182/ppp/src/network/Relation.java
+END
+DiffusionNetworkScorer.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/ppp/!svn/ver/384/ppp/src/network/DiffusionNetworkScorer.java
+END
+User.java
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/ppp/!svn/ver/1/ppp/src/network/User.java
+END
+MessageManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/166/ppp/src/network/MessageManager.java
+END
+NetworkFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/20/ppp/src/network/NetworkFactory.java
+END
+UserRegistrationTimeManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ppp/!svn/ver/1/ppp/src/network/UserRegistrationTimeManager.java
+END
+Cascade.java
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/ppp/!svn/ver/32/ppp/src/network/Cascade.java
+END
+Message.java
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/ppp/!svn/ver/1/ppp/src/network/Message.java
+END
+ResponseFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/ppp/!svn/ver/1/ppp/src/network/ResponseFactory.java
+END
+DiffusionNetworkFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/ppp/!svn/ver/289/ppp/src/network/DiffusionNetworkFactory.java
+END
+Network.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/ppp/!svn/ver/111/ppp/src/network/Network.java
+END
+ResponseManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/ppp/!svn/ver/166/ppp/src/network/ResponseManager.java
+END
+Statistics.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/ppp/!svn/ver/1/ppp/src/network/Statistics.java
+END
+Response.java
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/ppp/!svn/ver/1/ppp/src/network/Response.java
+END
+Time.java
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/ppp/!svn/ver/263/ppp/src/network/Time.java
+END

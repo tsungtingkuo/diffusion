@@ -1,0 +1,66 @@
+//import java.io.*;
+//import java.util.*;
+//import utility.*;
+
+public class Main_Test{
+	public static void main( String[] argv ) throws Exception {
+
+//		String s = "10110000";
+//		int i = Integer.parseInt(s);
+//		System.out.println(i);
+//		if((i/10)%10 == 1) {
+//			System.out.println("!");
+//		}
+		
+//		String s = "3 3204422 hugojay : 請問 那 是 什麼 軟體 可以 直接 看到 原始碼 ？ hugojay : 請問 那 是 什麼 軟體 可以 直接 看到 原始碼 ？ ";
+//		int srcIndex = s.indexOf(" ");
+//		int destIndex = s.indexOf(" ", srcIndex+1);
+//		System.out.println(s.substring(0, srcIndex));
+//		System.out.println(s.substring(srcIndex+1, destIndex));
+//		System.out.println(s.substring(destIndex+1, s.length()));
+		
+//		int instance = 1;
+//		int feature = 4;
+//		String classifier = "liblinear";
+//		String dataset = "plurk";
+//		String valid = "";
+//    	int[] testConcepts = Utility.loadIntegerArray("list/" + valid + "test.txt");
+//    	for(int concept : testConcepts) {
+//			Vector<String> sd = Utility.loadVector(classifier + "/" + dataset + "_" + valid + concept + "_" + instance + "_" + feature + "_source_dest.libsvm");
+//			Vector<String> dv = Utility.loadVector(classifier + "/" + dataset + "_" + valid + concept + "_" + instance + "_" + feature + "_scaled_dv.txt");
+//			PrintWriter pw = new PrintWriter(classifier + "/" + dataset + "_" + valid + concept + "_" + instance + "_" + feature + "_scaled_dn.txt");
+//			for(int i=0; i<sd.size(); i++) {
+//				String[] t = sd.get(i).split(",");
+//				pw.println(t[0] + "\t" + t[1] + "\t" + dv.get(i));
+//			}
+//			pw.flush();
+//			pw.close();
+//    	}
+		
+//		TreeMap<String, Integer> tm = Utility.loadStringToIntegerTreeMap("pattern/train_1_1.txt");
+//		PrintWriter pw = new PrintWriter("pattern/train_dn.txt");
+//		for(String s : tm.keySet()) {
+//			pw.println(s + "\t" + tm.get(s));
+//		}
+//		pw.flush();
+//		pw.close();
+		
+//		double d = 0.6;
+//		int i = (int)d;
+//		System.out.println(i);
+		
+//		Vector<String> v = Utility.loadVector("test.txt");
+//		for(String s : v) {
+//			String[] t = s.split("/");
+//			int m = Integer.parseInt(t[0]);
+//			int d = Integer.parseInt(t[1]);
+//			switch(m) {
+//			case 2: System.out.println(31 + d); break;
+//			case 3: System.out.println(59 + d); break;
+//			case 4: System.out.println(90 + d); break;
+//			case 5: System.out.println(120 + d); break;
+//			}
+//		}
+		
+	}
+}

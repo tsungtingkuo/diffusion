@@ -1,0 +1,47 @@
+import java.util.*;
+
+import utility.Utility;
+import network.*;
+
+public class Main_Statistics {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Filename
+		//String diffusionFileName = "diffusion_network_plurk_iii_concept40.txt";
+		//String diffusionFileName = "diffusion_network_plurk_iii_plasticizer2.txt";
+		//String diffusionFileName = "dna/dn_train_content.txt";
+		String diffusionFileName = "dna/dn_train_test_unweighted.txt";
+		
+		// Dataset
+		//String dataset = "plurk";
+		//String dataset = "facebook";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load network
+		//Network n = NetworkFactory.getNetwork(false, "data/user_table", "data/relation_table", "data/user_location_country", "data/user_location_city", "data/user_location_state", "data/user_relationship", "data/user_registration_time");
+		//Network n = NetworkFactory.getNetwork(true, "data/" + dataset + "_iii/user_" + dataset + ".txt", "data/" + dataset + "_iii/relation_" + dataset + ".txt");
+		DiffusionNetwork n = DiffusionNetworkFactory.getDiffusionNetwork(diffusionFileName);
+		System.out.println("User = " + n.getUserCount());
+		System.out.println("Vertex = " + n.getVertexCount());
+		System.out.println("Edge = " + n.getEdgeCount());
+		
+		// Connected component
+		Vector<Integer> sizes = new Vector<Integer>();
+		Set<Set<Long>> connectedComponents = Statistics.getConnectedComponent(n);
+		for(Set<Long> component : connectedComponents) {
+			sizes.add(component.size());
+		}
+		Utility.saveIntegerArray("sizes.txt", Utility.integerVectorToIntegerArray(sizes));
+		TreeSet<Integer> ts = new TreeSet<Integer>(sizes);
+		System.out.println("Max = " + ts.last());
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

@@ -1,0 +1,41 @@
+import java.util.*;
+
+public class Main_PrepareDataCV {
+
+	public static void main(String[] args) throws Exception {
+		
+		// The input of this program is cv train/test lists
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		String fold = args[0];
+		
+		String[] train = {"train", fold}; 
+		Main_SplitDataCV.main(train);	// This step is slow
+		Main_SortDataCV.main(train);
+		Main_DataDNCV.main(train);
+		Main_DataAggresiveCV.main(train);
+		Main_DNCombineAllCV.main(train);
+
+		String[] test = {"test", fold}; 
+		Main_SplitDataCV.main(test);	// This step is slow
+		Main_SortDataCV.main(test);
+		Main_DataDNCV.main(test);
+		Main_DataAggresiveCV.main(test);
+		Main_DNCombineAllCV.main(test);
+		
+		String[] sim = {"lda", fold}; 
+		Main_DNCombineTrainWithContentAllSimilarityCV.main(sim);
+		
+		String[] pattern = {fold}; 
+		Main_PatternCV.main(pattern);
+		Main_PatternToDN.main(pattern);
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

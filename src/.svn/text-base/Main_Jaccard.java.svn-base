@@ -1,0 +1,46 @@
+import java.util.*;
+import utility.*;
+//import network.*;
+
+public class Main_Jaccard {
+
+	public static void main(String[] args) throws Exception {
+
+		// File names
+//		String groundFileName = "dna/dn_test.txt";
+//		String predictFileName = "dna/dn_train.txt";
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Jaccard
+//		Vector<Long> groundVector = new Vector<Long>(DiffusionNetworkFactory.getDiffusionNetwork(groundFileName).getVertices());
+//		long[] ground = Utility.longVectorToLongArray(groundVector);
+//		Vector<Long> predictVector = new Vector<Long>(DiffusionNetworkFactory.getDiffusionNetwork(predictFileName).getVertices());
+//		long[] predict = Utility.longVectorToLongArray(predictVector);
+		
+		long[] ground = Utility.loadLongArray("data/plurk_iii/test/seed_all_test.txt");
+		long[] predict = Utility.loadLongArray("data/plurk_iii/train/seed_all_train.txt");
+		
+		Utility.computeJaccard(ground, predict);
+		int intersection = 0;
+		for(int i=0; i<ground.length; i++) {
+			for(int j=0; j<predict.length; j++) {
+				if(ground[i] == predict[j]) {
+					intersection++;
+					break;
+				}
+			}
+		}
+		int union = ground.length + predict.length - intersection;
+		System.out.println("Jaccard = " + (double)intersection/(double)union);
+		System.out.println("Precision = " + (double)intersection/(double)predict.length);
+		System.out.println("Recall = " + (double)intersection/(double)ground.length);
+			
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

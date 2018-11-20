@@ -1,0 +1,19 @@
+package predictor;
+
+import network.*;
+
+public class WholeDNPredictor extends DoNothingPredictor {
+	
+	public WholeDNPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+	
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+		result = this.dn;
+		for(long e : result.getEdges()) {
+			result.getRelation(e).setPredicted(true);
+			result.getRelation(e).setScore(1.0);
+		}
+		return result;
+	}	
+}

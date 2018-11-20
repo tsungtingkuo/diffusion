@@ -1,0 +1,46 @@
+import java.util.*;
+
+import utility.Utility;
+import network.*;
+
+public class Main_DNCombineTrainAll {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		if(args.length > 0) {
+			valid = "valid_";
+		}
+
+		// File names
+    	String trainListFileName = "list/" + valid + "train.txt";
+		
+		// Dataset
+		String dataset = "plurk";
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Combine train diffusion networks
+
+		String trainFileName = "dna/dn_" + valid + "train.txt";
+		String trainPrefix = "data/" + dataset + "_iii/" + valid + "train/dn_";
+		String trainPostfix = "_train.txt";
+		int[] trainList = Utility.loadIntegerArray(trainListFileName);
+		DiffusionNetwork trainDN = DiffusionNetworkFactory.combineDiffusionNetworkAll(trainPrefix, trainPostfix, trainList);
+		DiffusionNetworkFactory.saveDiffusionNetwork(trainDN, trainFileName);
+		
+		// Load train diffusion network
+		trainDN = DiffusionNetworkFactory.getDiffusionNetwork(trainFileName);
+		System.out.println("Vertex = " + trainDN.getVertexCount());
+		System.out.println("Edge = " + trainDN.getEdgeCount());
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

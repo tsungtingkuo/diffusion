@@ -1,0 +1,56 @@
+import java.util.*;
+
+import utility.Utility;
+import network.*;
+
+public class Main_DNCombineAllCV {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Parameter
+		String type = args[0];
+		int fold = Integer.parseInt(args[1]);
+
+		// Dataset
+		String dataset = "plurk";
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// File names
+    	String listFileName = "list/cv" + fold + "_" + type + ".txt";
+
+    	// Combine train diffusion networks
+		String fileName = "dna/dn_cv" + fold + "_" + type + ".txt";
+		String contentFileName = "dna/dn_cv" + fold + "_" + type + "_content.txt";
+		String prefix = "data/" + dataset + "_iii/cv" + fold + "/" + type + "/dn_";
+		String postfix = "_" + type + ".txt";
+		int[] list = Utility.loadIntegerArray(listFileName);
+
+		if(type.equalsIgnoreCase("train")) {
+			DiffusionNetwork trainDN = DiffusionNetworkFactory.combineDiffusionNetworkAll(prefix, postfix, list);
+			DiffusionNetworkFactory.saveDiffusionNetwork(trainDN, fileName);
+			
+			DiffusionNetwork trainDNContent = DiffusionNetworkFactory.combineDiffusionNetworkAllWithContent(prefix, postfix, list);
+			DiffusionNetworkFactory.saveDiffusionNetworkWithContent(trainDNContent, contentFileName);
+		}
+		else {
+			DiffusionNetwork testDN = DiffusionNetworkFactory.combineDiffusionNetworkAll(prefix, postfix, list);
+			DiffusionNetworkFactory.saveDiffusionNetwork(testDN, fileName);
+
+			String trainFileName = "dna/dn_cv" + fold + "_train.txt";
+			String diffusionFileName = "dna/dn_cv" + fold + "_train_test.txt";
+			DiffusionNetwork dn = DiffusionNetworkFactory.combineDiffusionNetwork(trainFileName, fileName);
+			DiffusionNetworkFactory.saveDiffusionNetwork(dn, diffusionFileName);
+
+			String unweightedFileName = "dna/dn_cv" + fold + "_train_test_unweighted.txt";
+			DiffusionNetworkFactory.saveDiffusionNetworkUnweighted(dn, unweightedFileName);
+		}
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

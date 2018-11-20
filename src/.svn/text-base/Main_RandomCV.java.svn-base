@@ -1,0 +1,24 @@
+import utility.*;
+
+public class Main_CV{
+	public static void main( String[] argv ) throws Exception {
+
+		int[] all = Utility.loadIntegerArray("list/all.txt");
+		int[] train = new int[75];
+		int[] test = new int[25];
+		all = Utility.shuffleIntegerArray(all);
+		
+		for(int f=0; f<4; f++) {
+			for(int i=0; i<75; i++) {
+				train[i] = all[(f*25+i)%100];
+			}
+			for(int i=0; i<25; i++) {
+				test[i] = all[(f*25+i+75)%100];
+			}
+			Utility.printIntegerArray(train, train.length);
+			Utility.printIntegerArray(test, test.length);
+			Utility.saveIntegerArray("list/cv" + (f+1) + "_train.txt", train);
+			Utility.saveIntegerArray("list/cv" + (f+1) + "_test.txt", test);
+		}
+	}
+}

@@ -1,0 +1,39 @@
+import java.util.*;
+
+import edu.uci.ics.jung.algorithms.scoring.PageRank;
+import network.*;
+
+public class Main_LinkNetworkPR {
+
+	public static void main(String[] args) throws Exception {
+		
+		String valid = args[0];
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load diffusion network
+		DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_" + valid + "train_test_unweighted.txt");
+
+		// Load link network
+		DiffusionNetwork ln = DiffusionNetworkFactory.getDiffusionNetwork("ln/ln_" + valid + "train_test_unweighted.txt");
+		
+		// PageRank
+		PageRank<Long, Long> pr = new PageRank<Long, Long>(ln, 0.15);
+		pr.evaluate();
+		
+		// Set weight
+		for(long v : ln.getVertices()) {
+			dn.getRelation(v).setWeight(pr.getVertexScore(v));
+		}
+		
+		// Save diffusion network
+		DiffusionNetworkFactory.saveDiffusionNetwork(dn, "dna/dn_" + valid + "train_test_pr.txt");
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

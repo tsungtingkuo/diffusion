@@ -1,0 +1,34 @@
+import java.util.*;
+import similarity.*;
+
+public class Main_Similarity {
+
+	public static void main(String[] args) throws Exception {
+
+		// Validation
+		//String valid = "";
+		String valid = "valid_";
+
+		// File names
+		String topicListFileName = "list/" + valid + "all.txt";
+		String trainListFileName = "list/" + valid + "train.txt";
+		String testListFileName = "list/" + valid + "test.txt";
+		String similarityFileName = "similarity/" + valid + "jaccard.txt";
+		
+		// Dataset
+		String dataset = "plurk";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Jaccard similarity
+		TopicSimilarity ts = new TopicSimilarity(dataset, valid, topicListFileName, trainListFileName, testListFileName);
+		ts.computeAndSaveSimilarities(similarityFileName);
+			
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

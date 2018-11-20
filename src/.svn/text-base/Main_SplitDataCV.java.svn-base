@@ -1,0 +1,62 @@
+import java.io.*;
+import java.util.*;
+
+import network.*;
+import utility.*;
+
+public class Main_SplitDataCV {
+
+	public static void main(String[] args) throws Exception {
+
+		// Parameter
+		String type = args[0];
+		int fold = Integer.parseInt(args[1]);
+		
+		// Dataset
+		String dataset = "plurk";
+
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// File names
+    	String listFileName = "list/cv" + fold + "_" + type + ".txt";
+	    	
+		// Split data
+    	int[] concepts = Utility.loadIntegerArray(listFileName);
+    	for(int concept : concepts) {
+    		System.out.print("Splitting fold " + fold + ", concept " + concept + " ... ");
+    		FileOutputStream fos = new FileOutputStream("data/" + dataset + "_iii/cv" + fold + "/" + type + "/response_" + concept + "_" + type + ".txt");
+    		OutputStreamWriter osw = new OutputStreamWriter(fos, encoding);
+    		BufferedWriter bw = new BufferedWriter(osw);
+    		MessageManager mm = new MessageManager("data/" + dataset + "_iii/message_concept" + concept + "_" + dataset + ".txt", encoding);
+    		ResponseManager rm = new ResponseManager("data/" + dataset + "_iii/response_concept" + concept + "_" + dataset + ".txt", encoding);
+    		for(Response r : rm.getResponses()) {
+    			long messageId = r.getMessageId();
+    			Message m = mm.getMessage(messageId);
+    			if(m != null) {
+    				long messageUserId = m.getUserId();
+    				long responseUserId = r.getUserId();
+           			if(messageUserId != responseUserId) {
+           				GregorianCalendar t = r.getTime();
+           				String content = r.getContent(); 
+           				bw.write(messageUserId + "\t" + responseUserId + "\t" + Time.formatTime(t) + "\t" + content + "\n");
+           			}
+	    		}
+    		}
+    		bw.flush();
+    		bw.close();
+    		osw.close();
+    		fos.close();		
+    		System.out.println("done.");
+    	}
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

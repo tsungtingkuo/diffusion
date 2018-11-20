@@ -1,0 +1,54 @@
+
+import java.io.*;
+import java.util.*;
+import utility.*;
+
+public class Main_DirectCSV{
+	public static void main(String[] args )throws Exception{
+
+		String inputFileName = "report/result_plurk_iii_dn_concept40.txt";
+		String modelFileName = "report/grw_models.txt";
+		String outputFileName = "report/result_plurk_iii_dn_concept40.csv";
+
+		Vector<String> models = Utility.loadVector(modelFileName);
+		Vector<String> lines = Utility.loadVector(inputFileName);
+		PrintWriter pw = new PrintWriter(outputFileName);
+		for(int i=0; i<lines.size(); i++) {
+			if(i == 0) {
+				pw.println("Model,Parameter,Node,Neighbor,DN,Precision,Recall,F1,Count");
+			}
+			else {
+				String[] t = lines.get(i).split("\\|");
+				String model = t[3];
+				pw.print(model + ",");
+				
+				// Parameters
+				if(model.equalsIgnoreCase("rw")) {
+					String[] p = t[4].split("_");
+					if(p.length == 1) {
+						pw.print(t[4] + ",-,-,-");
+					}
+					else {
+						String node = "GIVEN";
+						if(!p[1].equalsIgnoreCase("S")) {
+							node = models.get(Integer.parseInt(p[1]));							
+						}
+						String neighbor = models.get(Integer.parseInt(p[2]));
+						pw.print(p[0] + "," + node + "," + neighbor + "," + p[3]);
+					}
+				}
+				else {
+					pw.print(t[4] + ",-,-,-");
+				}
+				
+				pw.print("," + t[13]);	// Precision
+				pw.print("," + t[14]);	// Recall
+				pw.print("," + t[15]);	// F1
+				pw.print("," + t[16]);	// Count
+				pw.println();
+			}
+		}
+		pw.flush();
+		pw.close();
+	}
+}

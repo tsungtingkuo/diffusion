@@ -1,0 +1,63 @@
+package predictor;
+
+import java.util.*;
+
+
+import utility.Utility;
+
+import network.*;
+
+public class GuidedRandomKNeighborsPredictor extends DoNothingPredictor {
+	
+	int k = 1;
+
+	public long select(Network n, Vector<Long> candidates, long sourceId, Random random) {
+		TreeMap<Long, Double> idPrior = new TreeMap<Long, Double>();
+		for(long id : candidates) {
+			idPrior.put(id, (double)1/(double)(this.dnt.getOutWeightPlusOne(sourceId, id)));
+		}				
+		return Utility.randomSelectionWithPrior(idPrior, random);
+	}
+	
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+
+		// Initialization
+		Random random = new Random();
+		
+		// Random select k neighbors
+		for(long uid1 : aggresives) {
+			Vector<Long> candidates = getCandidates(uid1);
+			if(candidates.size() <= k) {
+				for(int i=0; i<candidates.size(); i++) {
+					result = this.activate(result, uid1, candidates.get(i));
+				}
+			}
+			else {
+				for(int i=0; i<k; i++) {
+					long uid2 = this.select(this.dn, candidates, uid1, random);
+					result = this.activate(result, uid1, uid2);
+				}
+			}			
+		}
+		
+		return result;
+	}
+
+	public GuidedRandomKNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) {
+		super(dn, dnt);
+	}
+
+	/**
+	 * @return the k
+	 */
+	public int getK() {
+		return k;
+	}
+
+	/**
+	 * @param k the k to set
+	 */
+	public void setK(int k) {
+		this.k = k;
+	}
+}

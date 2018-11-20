@@ -1,0 +1,71 @@
+import java.util.*;
+import utility.*;
+import network.*;
+
+public class Main_CandidateAnalysis {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+			
+		// File names
+    	String testListFileName = "list/" + valid + "test.txt";
+    	
+    	// Dataset
+    	String dataset = "plurk";
+    	
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Diffusion Network
+    	System.out.print("Loading networks ... ");
+    	DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_" + valid + "train_test_unweighted.txt");
+    	DiffusionNetwork dnt = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/dn_" + valid + "train_content.txt");
+    	System.out.println("done.");
+    	
+		// Candidate analysis
+    	System.out.println();
+		System.out.println("^Topic^Total^Train^Test^");
+    	int[] testConcepts = Utility.loadIntegerArray(testListFileName);
+		int trainSum = 0;
+		int testSum = 0;
+		int totalSum = 0;
+		TreeSet<String> trainUnique = new TreeSet<String>(); 
+		TreeSet<String> testUnique = new TreeSet<String>(); 
+		TreeSet<String> totalUnique = new TreeSet<String>(); 
+		for(int testConcept : testConcepts) {
+    		long[] aggresives = Utility.loadLongArray("data/" + dataset + "_iii/" + valid + "test/aggresive_" + testConcept + "_test.txt");		
+    		int train = 0;
+    		int test = 0;
+    		int total = 0;
+   			for(long uid1 : aggresives) {
+   				for(long uid2 : dn.getSuccessors(uid1)) {
+   					if(dnt.findEdge(uid1, uid2) != null) {
+   						train++;
+   						trainSum++;
+   	   					trainUnique.add(uid1 + "_" + uid2);
+   					}
+   					else {
+   						test++;
+   						testSum++;
+   	   					testUnique.add(uid1 + "_" + uid2);
+   					}
+   					total++;
+   					totalSum++;
+   					totalUnique.add(uid1 + "_" + uid2);
+   				}
+   			}	    		
+			System.out.println("|" + testConcept + "|" + total + "|" + train + "|" + test + "|");
+    	}
+		System.out.println("|Total|" + totalSum + "|" + trainSum + "|" + testSum + "|"); 
+		System.out.println("|Unique|" + totalUnique.size() + "|" + trainUnique.size() + "|" + testUnique.size() + "|"); 
+    
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

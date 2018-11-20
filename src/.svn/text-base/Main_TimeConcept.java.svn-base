@@ -1,0 +1,74 @@
+import java.io.*;
+import java.util.*;
+import network.*;
+import utility.*;
+
+public class Main_TimeConcept {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		if(args.length > 0) {
+			valid = "valid_";
+		}
+    	
+		// Dataset
+		String dataset = "plurk";
+
+		// File name
+   		String listFileName = "list/" + valid + "train.txt";
+
+   		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+    	int[] concepts = Utility.loadIntegerArray(listFileName);
+    	for(int concept : concepts) {
+    		System.out.print("Timing concept " + concept + " ... ");
+    		TreeMap<String, Double> minDay = new TreeMap<String, Double>();
+    		TreeMap<String, Double> maxDay = new TreeMap<String, Double>();
+    		String[] data = Utility.loadStringArray("data/" + dataset + "_iii/" + valid + "train/sorted_" + concept + "_train.txt");
+    		for(String s : data) {
+    			String[] t = s.split("\t");
+    			String sd = t[0] + "\t" + t[1];
+    			double day = Time.getAgeInDayPlusOneTransformed(t[2]);
+    			if(minDay.containsKey(sd)) {
+        			if(minDay.get(sd) > day) {
+        				minDay.put(sd, day);
+        			}
+        			if(maxDay.get(sd) < day) {
+        				maxDay.put(sd, day);
+        			}
+    			}
+    			else {
+    				minDay.put(sd, day);
+    				maxDay.put(sd, day);
+    			}
+    		}
+    		System.out.println("done.");
+			PrintWriter pw = new PrintWriter("dna/time/dn_" + valid + "train_time_" + concept + ".txt");
+			PrintWriter pwb = new PrintWriter("dna/time/dn_" + valid + "train_binary_" + concept + ".txt");
+			for(String sd : minDay.keySet()) {
+				double t = maxDay.get(sd) - minDay.get(sd);
+				pw.println(sd + "\t" + (t + 1.0));
+				if(t > 0.0) {
+					pwb.println(sd + "\t1.0");
+				}
+				else {
+					pwb.println(sd + "\t0.0");
+				}
+			}
+			pw.flush();
+			pw.close();
+			pwb.flush();
+			pwb.close();
+    	}
+    	
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

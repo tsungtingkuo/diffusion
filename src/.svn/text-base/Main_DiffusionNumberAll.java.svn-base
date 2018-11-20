@@ -1,0 +1,55 @@
+
+import ij.measure.*;
+import fitter.*;
+import utility.*;
+
+public class Main_DiffusionNumberAll{
+	public static void main( String[] argv ) throws Exception{
+
+		int type = CurveFitter.GAUSSIAN;
+		double magicNumber = 6.6;
+		
+		//double[][] yAlls = Utility.loadDouble2DArray("number/Date_Count_III_v2_0802_MR_120.csv");
+		//double[][] yAlls = Utility.loadDouble2DArray("number/Date_Count_III_v2_0802_F_120.csv");	
+		//double[][] yAlls = Utility.loadDouble2DArray("number/Date_Count_III_v2_0821_D_120.csv");
+		double[][] yAlls = Utility.loadDouble2DArray("number/Date_Count_Plasticizer_0823_D_2.csv");
+		
+		//int[] ids = Utility.loadIntegerArray("number/plurk_iii_100.txt");
+		int[] ids = Utility.loadIntegerArray("number/plurk_plasticizer_2.txt");
+
+		//int[] splits = Utility.loadIntegerArray("number/plurk_iii_120_split.txt");
+		int[] splits = Utility.loadIntegerArray("number/plurk_plasticizer_2_split.txt");
+		
+		double yTestSum[] = new double[ids.length];
+		double yTestPredictSum[] = new double[ids.length];
+		double yTestErrorRatio[] = new double[ids.length];
+		for(int i=0; i<ids.length; i++) {
+			int id = ids[i]-1;
+			int split = splits[id];
+			double[] yAll = yAlls[id];
+			if(yAll.length > split) {
+				double[] yTrain = new double[split];
+				double[] yTest = new double[yAll.length - split];
+				for(int j=0; j<split; j++) {
+					yTrain[j] = yAll[j];
+				}
+				yTestSum[i] = 0.0;
+				for(int j=split; j<yAll.length; j++) {
+					yTest[j-split] = yAll[j];
+					yTestSum[i] += yTest[j-split];
+				}
+				MaxPlusOneFitter mpof = new MaxPlusOneFitter(yTrain, type);
+				yTestPredictSum[i] = mpof.predictTest(yTest.length)/magicNumber;
+				yTestErrorRatio[i] = (yTestPredictSum[i]-yTestSum[i])/yTestSum[i];
+				System.out.println((id+1) + ", " + split + ", " + yTestSum[i] + ", " + yTestPredictSum[i] + ", " + yTestErrorRatio[i]);
+			}
+			else {
+				System.out.println((id+1) + ", " + split + ", " + 0.0 + ", " + 0.0 + ", " + 0.0);
+			}
+		}
+		double average = Utility.computeMean(yTestErrorRatio);
+		double stdev = Utility.computeStandardDeviation(yTestErrorRatio);
+		System.out.println("Average error ratio = " + average);
+		System.out.println("Stdev error ratio = " + stdev);
+	}
+}

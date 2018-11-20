@@ -1,0 +1,23 @@
+import java.util.*;
+import utility.Utility;
+
+public class Main_Unique {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Split data
+		Utility.extractUniqueField("data/message", "data/message_qualifier", "\t", 2);
+		Utility.extractUniqueField("data/message", "data/message_lang", "\t", 3);
+		Utility.extractUniqueField("data/response", "data/response_qualifier", "\t", 3);
+		Utility.extractUniqueField("data/response", "data/response_lang", "\t", 4);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

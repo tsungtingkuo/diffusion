@@ -1,0 +1,61 @@
+package predictor;
+
+import java.util.*;
+
+import network.*;
+
+public class GuidedDHopKNeighborsPredictor extends GuidedKNeighborsPredictor {
+	
+	int d = 1;
+
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+	
+		// Guided select k neighbors
+		Vector<Long> queue = new Vector<Long>();
+		Vector<Long> nextqueue = new Vector<Long>();
+		for(long u : aggresives) {
+			queue.add(u);
+		}
+		for(int j=0; j<d; j++) {
+			for(long uid1 : queue) {
+				Vector<Long> candidates = getCandidates(uid1);
+				int select = k;
+				if(select > candidates.size()) {
+					select = candidates.size();
+				}
+				TreeMap<Long, Double> tm = this.selectTopK(candidates, uid1, select);
+				for(long uid2 : candidates) {
+					if(tm.containsKey(uid2)) {
+						result = this.activate(result, uid1, uid2, true, tm.get(uid2));
+						nextqueue.add(uid2);
+					}
+					else {
+						result = this.activate(result, uid1, uid2, false, 0.0);
+					}
+				}
+			}
+			queue = new Vector<Long>(nextqueue);
+			nextqueue = new Vector<Long>();
+		}
+		
+		return result;
+	}
+
+	public GuidedDHopKNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+
+	/**
+	 * @return the d
+	 */
+	public int getD() {
+		return d;
+	}
+
+	/**
+	 * @param d the d to set
+	 */
+	public void setD(int d) {
+		this.d = d;
+	}
+}

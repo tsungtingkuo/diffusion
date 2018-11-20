@@ -1,0 +1,77 @@
+package predictor;
+
+import java.util.*;
+
+import utility.*;
+import network.*;
+
+public class PerfectKNeighborsPredictor extends DoNothingPredictor {
+	
+	int k = 1;
+	DiffusionNetwork ground = null;
+
+	public TreeMap<Long, Double> selectPerfectK(Vector<Long> candidates, long sourceId, int k) {
+		TreeMap<Long, Double> tm = new TreeMap<Long, Double>();
+		for(long id : candidates) {
+			if(this.ground.findEdge(sourceId, id) != null) {
+				tm.put(id, 1.0);
+			}
+			else {
+				tm.put(id, 0.0);
+			}
+		}
+		return Utility.getTopValuedLongToDoubleTreeMap(tm, k, true);
+	}
+	
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+		for(long uid1 : aggresives) {
+			Vector<Long> candidates = getCandidates(uid1);
+			int select = k;
+			if(select > candidates.size()) {
+				select = candidates.size();
+			}
+			TreeMap<Long, Double> tm = this.selectPerfectK(candidates, uid1, select);
+			for(long uid2 : candidates) {
+				if(tm.containsKey(uid2)) {
+					result = this.activate(result, uid1, uid2, true, tm.get(uid2));
+				}
+				else {
+					result = this.activate(result, uid1, uid2, false, 0.0);
+				}
+			}
+		}		
+		return result;
+	}
+
+	public PerfectKNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+
+	/**
+	 * @return the k
+	 */
+	public int getK() {
+		return k;
+	}
+
+	/**
+	 * @param k the k to set
+	 */
+	public void setK(int k) {
+		this.k = k;
+	}
+
+	/**
+	 * @return the ground
+	 */
+	public DiffusionNetwork getGround() {
+		return ground;
+	}
+
+	/**
+	 * @param ground the ground to set
+	 */
+	public void setGround(DiffusionNetwork ground) {
+		this.ground = ground;
+	}
+}

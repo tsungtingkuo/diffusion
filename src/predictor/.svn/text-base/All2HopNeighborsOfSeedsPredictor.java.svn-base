@@ -1,0 +1,63 @@
+package predictor;
+
+import java.util.*;
+
+import network.*;
+
+public class AllTwoHopNeighborsOfSeedsPredictor extends BaselinePredictor {
+	
+	public DiffusionNetwork predict(int concept, long[] seeds) {
+		DiffusionNetwork result = this.setSeeds(seeds);
+
+		// Select all one-hop neighbors
+		Vector<Long> oneHopSeeds = new Vector<Long>();
+		for(long uid1 : seeds) {
+			Vector<Long> candidates = getCandidates(uid1);
+			for(long uid2 : candidates) {
+				this.dn.getUser(uid2).setState(User.STATE_ACTIVATED);
+				Relation r = this.dn.getRelation(this.dn.findEdge(uid1, uid2));
+				result.addVertex(uid2) ;
+				result.addEdge(r.getId(), uid1, uid2);
+				oneHopSeeds.add(uid2);
+			}
+		}
+
+		// Select all two-hop neighbors
+		for(long uid1 : oneHopSeeds) {
+			Vector<Long> candidates = getCandidates(uid1);
+			for(long uid2 : candidates) {
+				this.dn.getUser(uid2).setState(User.STATE_ACTIVATED);
+				Relation r = this.dn.getRelation(this.dn.findEdge(uid1, uid2));
+				result.addVertex(uid2) ;
+				result.addEdge(r.getId(), uid1, uid2);
+			}
+		}
+		
+		return result;
+	}
+
+	public boolean hasCandidates(long uid) {
+		for( Long id :  this.dn.getSuccessors(uid)){
+			User u = this.dn.getUser( id );
+			if(u.getState()==User.STATE_INACTIVATED) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Vector<Long> getCandidates(long uid) {
+		Vector<Long> candidates = new Vector<Long>();
+		for( Long id :  this.dn.getSuccessors(uid)){
+			User u = this.dn.getUser( id );
+			if(u.getState()==User.STATE_INACTIVATED) {
+				candidates.add(id);
+			}
+		}
+		return candidates;
+	}
+
+	public AllTwoHopNeighborsOfSeedsPredictor(DiffusionNetwork dn) {
+		super(dn);
+	}
+}

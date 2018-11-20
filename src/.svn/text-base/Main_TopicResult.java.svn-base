@@ -1,0 +1,88 @@
+import java.io.*;
+import java.util.*;
+import utility.*;
+
+public class Main_TopicResult {
+
+	public static void main(String[] args) throws Exception {
+
+		// Parameter
+		int numTopics = 7;
+		
+		// Level
+		//String level = "";
+		//String level = "_message";
+		String level = "_mr";
+
+		// Postprocess
+		//String pp = "_sum";
+		String pp = "_average";
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// File names
+//    	String messageDir = "data/plurk_iii/message";
+		String listFileName = "list/all.txt";
+		String messageNumberFileName = "list/all_message.txt";
+		String documentTopicFileName = "topic/doctopic" + level + ".txt";
+		String resultFileName = "topic/lda" + level + ".txt";
+		if(level.equalsIgnoreCase("_message")) {
+			resultFileName = "topic/lda" + level + pp + ".txt";
+		}
+    	
+    	int[] concepts = Utility.loadIntegerArray(listFileName);
+//    	TreeMap<Integer, Integer> tm = new TreeMap<Integer, Integer>();
+//		for(int c : concepts) {
+//			int num = Utility.getFileLineNumber(messageDir + "/split_filter_message_concept" + c + "_plurk_cleaned.txt");
+//			tm.put(c, num);
+//		}
+//		Utility.saveIntegerToIntegerTreeMap(tm, messageNumberFileName);
+
+		double[][] result = new double[concepts.length][numTopics];
+		if(!level.equalsIgnoreCase("_message")) {
+			Vector<String> output = Utility.loadVector(documentTopicFileName);
+			for(int c=0; c<concepts.length; c++) {
+				String[] t = output.get(c+1).split("\t");
+				int topics = (t.length/2)-1;
+				for(int j=0; j<topics; j++) {
+					int id = Integer.parseInt(t[j*2+2]);
+					double score = Double.parseDouble(t[j*2+3]);
+					result[c][id] = score;
+				}
+			}
+		}
+		else {
+			System.out.print("Processing ");
+			TreeMap<Integer, Integer> tm = Utility.loadIntegerToIntegerTreeMap(messageNumberFileName);
+			FileInputStream fis = new FileInputStream(documentTopicFileName);
+			InputStreamReader isr = new InputStreamReader(fis, encoding);
+			LineNumberReader lnr = new LineNumberReader(isr);
+			String s = lnr.readLine();
+			for(int c=0; c<concepts.length; c++) {
+				System.out.print(".");
+				int size = tm.get(concepts[c]);
+				for(int i=0; i<size; i++) {
+					s = lnr.readLine();
+					String[] t = s.split("\t");
+					int topics = (t.length/2)-1;
+					for(int j=0; j<topics; j++) {
+						int id = Integer.parseInt(t[j*2+2]);
+						double score = Double.parseDouble(t[j*2+3]);
+						if(pp.equalsIgnoreCase("_sum")) {
+							result[c][id] += score;
+						}
+						else {
+							result[c][id] += ((double)score/(double)size);
+						}
+					}
+				}
+			}
+			lnr.close();
+			isr.close();
+			fis.close();
+			System.out.println("done.");
+		}
+		Utility.saveDouble2DArray(resultFileName, result);
+	}
+}

@@ -1,0 +1,152 @@
+package predictor;
+
+import java.util.*;
+
+import classifier.MyLibSVM;
+
+import utility.Utility;
+import network.*;
+
+public class LibSVMPredictor extends DoNothingPredictor {
+	
+	String dataset = "";
+	String classifier = "";
+	String valid = "";
+	String w = "1";
+	String c = "1";
+	int instance = MyLibSVM.INSTANCE_UNKNOWN;
+	int feature = 0;
+	MyLibSVM svm = null;
+	
+	public void initializeSVM() throws Exception {
+		this.svm = new MyLibSVM(this.dataset, this.classifier, this.valid, this.instance, this.feature, this.w, this.c);
+		this.svm.initializeData();
+	}
+	
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+	
+		// Test
+		Vector<String> sd = this.svm.prepareDataTest(concept, aggresives);
+		this.svm.test(concept, sd);
+		//Vector<String> sd = Utility.loadVector(this.classifier + "/" + this.dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_" + w + "_" + c + "_source_dest.libsvm");
+		Vector<Double> dv = Utility.loadDoubleVector(this.classifier + "/" + this.dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled_dv.txt");
+		Vector<String> r = Utility.loadVector(this.classifier + "/" + this.dataset + "_" + this.valid + concept + "_" + instance + "_" + feature + "_" + w + "_" + c + "_scaled.txt");
+		for(int i=0; i<r.size(); i++) {
+			String v = r.get(i);
+			String s = sd.get(i);
+			String[] t = s.split(",");
+			long source = Long.parseLong(t[0]);
+			long dest = Long.parseLong(t[1]);
+			boolean predicted = false;
+			double score = dv.get(i);
+			if((this.classifier.equalsIgnoreCase("libsvm") && v.equalsIgnoreCase("1.0"))
+				|| (this.classifier.equalsIgnoreCase("liblinear") && v.equalsIgnoreCase("1"))) {
+				predicted = true;
+			}
+			result = this.activate(result, source, dest, predicted, score);
+		}
+		return result;
+	}
+
+	public LibSVMPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+
+	/**
+	 * @return the classifier
+	 */
+	public String getClassifier() {
+		return classifier;
+	}
+
+	/**
+	 * @param classifier the classifier to set
+	 */
+	public void setClassifier(String classifier) {
+		this.classifier = classifier;
+	}
+
+	/**
+	 * @return the valid
+	 */
+	public String getValid() {
+		return valid;
+	}
+
+	/**
+	 * @param valid the valid to set
+	 */
+	public void setValid(String valid) {
+		this.valid = valid;
+	}
+
+	/**
+	 * @return the instance
+	 */
+	public int getInstance() {
+		return instance;
+	}
+
+	/**
+	 * @param instance the instance to set
+	 */
+	public void setInstance(int instance) {
+		this.instance = instance;
+	}
+
+	/**
+	 * @return the feature
+	 */
+	public int getFeature() {
+		return feature;
+	}
+
+	/**
+	 * @param feature the feature to set
+	 */
+	public void setFeature(int feature) {
+		this.feature = feature;
+	}
+
+	/**
+	 * @return the dataset
+	 */
+	public String getDataset() {
+		return dataset;
+	}
+
+	/**
+	 * @param dataset the dataset to set
+	 */
+	public void setDataset(String dataset) {
+		this.dataset = dataset;
+	}
+
+	/**
+	 * @return the w
+	 */
+	public String getW() {
+		return w;
+	}
+
+	/**
+	 * @param w the w to set
+	 */
+	public void setW(String w) {
+		this.w = w;
+	}
+
+	/**
+	 * @return the c
+	 */
+	public String getC() {
+		return c;
+	}
+
+	/**
+	 * @param c the c to set
+	 */
+	public void setC(String c) {
+		this.c = c;
+	}
+}

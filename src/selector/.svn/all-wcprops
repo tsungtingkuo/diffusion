@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/ppp/!svn/ver/154/ppp/src/selector
+END
+FromFileSelector.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/ppp/!svn/ver/154/ppp/src/selector/FromFileSelector.java
+END
+RandomKSelector.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ppp/!svn/ver/1/ppp/src/selector/RandomKSelector.java
+END
+TopKSelector.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/ppp/!svn/ver/1/ppp/src/selector/TopKSelector.java
+END

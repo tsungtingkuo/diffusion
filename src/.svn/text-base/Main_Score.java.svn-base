@@ -1,0 +1,22 @@
+
+import java.util.*;
+import score.*;
+import supervised.*;
+
+public class Main_Score {
+
+	public static void main(String[] args) throws Exception {
+		
+		String predictionFileName = "score/prediction/test/facebook.loo.ic.0.2.ubi.rst";
+		String groundFileName = "score/ground/test.score.ubi.If";
+		
+		Map<Long, Double> prediction = ScoreLoader.load(predictionFileName);
+		Map<Long, Double> ground = ScoreLoader.load(groundFileName);
+		
+		double kt = KendalltauScorer.getR(prediction, ground);
+		System.out.println("Kendall-Tau = "+ kt);
+		
+		double sm = SpearmanScorer.getR(prediction, ground);
+		System.out.println("Spearman = " + sm);
+	}
+}

@@ -1,0 +1,57 @@
+import java.io.*;
+import java.util.*;
+import network.*;
+
+public class Main_CleanAllResponses {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Dataset
+		String dataset = "plurk";
+		//String dataset = "facebook";
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Load user
+		Network n = new Network();
+		//NetworkFactory.loadUser(false, n, "data/user_table");
+		//NetworkFactory.loadUser(true, n, "data/" + dataset + "_iii/user_" + dataset + ".txt");
+		NetworkFactory.loadUser(true, n, "data/" + dataset + "_iii_plasticizer/user_" + dataset + ".txt");
+		System.out.println("User = " + n.getUserCount());
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		PrintWriter pw = new PrintWriter("responses_" + dataset + ".csv");
+		pw.println("ConceptID,Count,Cleaned");
+		for(int i=1; i<=120; i++) {
+			int count = 0;
+			int cleaned = 0;
+			//File f = new File("data/" + dataset + "_iii/message_concept" + i + "_" + dataset + ".txt");
+			File f = new File("data/" + dataset + "_iii_plasticizer/message_concept" + i + "_" + dataset + ".txt");
+			if(f.exists()) {
+				// Load response
+				//ResponseManager rm = new ResponseManager("data/" + dataset + "_iii/response_concept" + i + "_" + dataset + ".txt");
+				ResponseManager rm = new ResponseManager("data/" + dataset + "_iii_plasticizer/response_concept" + i + "_" + dataset + ".txt", encoding);
+				count = rm.getResponsesCount();
+		
+				// Clean response
+				//ResponseManager.cleanResponse(n, "data/response", "data/response_cleaned");
+				//cleaned = ResponseManager.cleanResponse(true, n, "data/" + dataset + "_iii/response_concept" + i + "_" + dataset + ".txt", "data/" + dataset + "_iii/response_concept" + i + "_" + dataset + "_cleaned.txt");
+				cleaned = ResponseManager.cleanResponse(true, n, "data/" + dataset + "_iii_plasticizer/response_concept" + i + "_" + dataset + ".txt", "data/" + dataset + "_iii_plasticizer/response_concept" + i + "_" + dataset + "_cleaned.txt", encoding);
+			}
+			pw.println(i + "," + count + "," + cleaned);
+			System.out.print(".");
+		}
+		pw.flush();
+		pw.close();
+		System.out.println();
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

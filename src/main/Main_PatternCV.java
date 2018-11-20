@@ -1,0 +1,56 @@
+package main;
+import java.util.*;
+
+import pattern.*;
+import utility.Utility;
+import network.*;
+
+public class Main_PatternCV {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Fold
+		int fold = Integer.parseInt(args[0]);
+
+		// Parameters
+		int support = 1;	
+		String substring = "";
+		
+		// File names
+    	String trainListFileName = "list/cv" + fold + "_train.txt";
+    	String patternPrefix = "pattern/cv" + fold + "_train_" + support + "_";
+    	if(!substring.equalsIgnoreCase("")) {
+        	patternPrefix = "pattern/cv" + fold + "_train_" + substring + "_" + support + "_";
+    	}
+    	String patternPostfix = ".txt";
+
+    	// Dataset
+    	String dataset = "plurk";
+    	
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Cascades
+    	int[] trainConcepts = Utility.loadIntegerArray(trainListFileName);
+    	System.out.print("Loading cascades ... ");
+    	CascadesManager cm = new CascadesManager(encoding);
+    	for(int trainConcept : trainConcepts) {
+    		cm.loadCascades(trainConcept, "data/" + dataset + "_iii/cv" + fold + "/train/sorted_" + trainConcept + "_train.txt");
+    	}
+    	System.out.println("done.");
+    	   	
+		// Miner
+    	InterTopicTrain train = new InterTopicTrain(cm, support, substring);
+    	train.identifyOneHopPatterns();
+    	train.savePatterns(patternPrefix, patternPostfix);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

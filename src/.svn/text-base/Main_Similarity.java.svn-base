@@ -1,0 +1,52 @@
+import java.util.*;
+import similarity.*;
+
+public class Main_Similarity {
+
+	public static void main(String[] args) throws Exception {
+
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+
+		// Name
+		//String sim = "allone";
+		//String sim = "random";
+		//String sim = "jaccard";
+		String sim = "lda";
+		//String sim = "lda_message_sum";
+		//String sim = "lda_message_average";
+		//String sim = "lda_mr";
+		//String sim = "lda_weidong";
+		//String sim = "category";
+	
+		// Type
+		//int type = TopicSimilarity.ALLONE;
+		//int type = TopicSimilarity.RANDOM;
+		//int type = TopicSimilarity.JACCARD;
+		int type = TopicSimilarity.LDA;
+		//int type = TopicSimilarity.CATEGORY;
+		
+		// File names
+		String topicListFileName = "list/" + valid + "all.txt";
+		String trainListFileName = "list/" + valid + "train.txt";
+		String testListFileName = "list/" + valid + "test.txt";
+		String similarityFileName = "similarity/" + valid + sim + ".txt";
+		
+		// Dataset
+		String dataset = "plurk";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Jaccard similarity
+		TopicSimilarity ts = new TopicSimilarity(type, dataset, valid, topicListFileName, trainListFileName, testListFileName, sim);
+		ts.computeAndSaveSimilarities(similarityFileName);
+			
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

@@ -1,0 +1,48 @@
+import java.util.*;
+import edu.uci.ics.jung.algorithms.scoring.*;
+import network.*;
+import transformer.*;
+
+public class Main_LinkNetworkPRP {
+
+	public static void main(String[] args) throws Exception {
+		
+		String valid = args[0];
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load diffusion network
+		DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_" + valid + "train_test_unweighted.txt");
+
+		// Load pattern network
+		DiffusionNetwork dnPattern = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/" + valid + "train_1_1_dn.txt");
+
+		// Load link network
+		DiffusionNetwork ln = DiffusionNetworkFactory.getDiffusionNetwork("ln/ln_" + valid + "train_test_unweighted.txt");
+
+		// Node PageRank
+		PageRank<Long, Long> prNode = new PageRank<Long, Long>(dn, 0.15);
+		prNode.evaluate();
+
+		// Link PageRank
+		LinkPageRankEdgeWeights edgeWeights = new LinkPageRankEdgeWeights(dn, ln, prNode);
+		LinkPageRankVertexPriors vertexPriors = new LinkPageRankVertexPriors(dn, dnPattern);
+		PageRankWithPriors<Long, Long> prLink = new PageRankWithPriors<Long, Long>(ln, edgeWeights, vertexPriors, 0.15);
+		prLink.evaluate();
+		
+		// Set weight
+		for(long v : ln.getVertices()) {
+			dn.getRelation(v).setWeight(prLink.getVertexScore(v));
+		}
+		
+		// Save diffusion network
+		DiffusionNetworkFactory.saveDiffusionNetwork(dn, "dna/dn_" + valid + "train_test_prp.txt");
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

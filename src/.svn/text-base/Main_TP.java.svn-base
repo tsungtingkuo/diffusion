@@ -1,0 +1,71 @@
+import java.util.*;
+import utility.*;
+//import network.*;
+
+public class Main_TP {
+
+	public static void main(String[] args) throws Exception {
+
+		// TP to compare
+		String tp1name = "dnt";
+		String tp2name = "an";
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		
+		// File names
+    	String testListFileName = "list/" + valid + "test.txt";
+
+    	// Dataset
+    	String dataset = "plurk";
+    	
+    	// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+    	int[] testConcepts = Utility.loadIntegerArray(testListFileName);
+		System.out.println("^Concept^Ground^Intersection^1-Only^2-Only^Union^");
+		int sumGround = 0;
+		int sumOverlap = 0;
+		int sumTp1only = 0;
+		int sumTp2only = 0;
+		int sumUnion = 0;
+		for(int testConcept : testConcepts) {
+			Vector<String> tp1 = Utility.loadVector("confusion/" + tp1name + "/tp_" + testConcept + ".txt"); 
+			Vector<String> tp2 = Utility.loadVector("confusion/" + tp2name + "/tp_" + testConcept + ".txt");
+			int ground = Utility.getFileLineNumber("data/" + dataset + "_iii/" + valid + "test/dn_" + testConcept + "_test.txt");
+			int overlap = 0;
+			int tp1only = 0;
+			for(String s1 : tp1) {
+				boolean found = false;
+				for(String s2 : tp2) {
+					if(s1.equalsIgnoreCase(s2)) {
+						found = true;
+						break;
+					}
+				}
+				if(found) {
+					overlap++;
+				}
+				else {
+					tp1only++;
+				}
+			}
+			int tp2only = tp2.size() - overlap;
+			int union = tp2.size() + tp1only;
+			System.out.println("|" + testConcept + "|" + ground + "|" + overlap + "|" + tp1only + "|" + tp2only + "|" + union + "|");
+			sumGround += ground;
+			sumOverlap += overlap;
+			sumTp1only += tp1only;
+			sumTp2only += tp2only;
+			sumUnion += union;
+		}
+		System.out.println("|Total|" + sumGround + "|" + sumOverlap + "|" + sumTp1only + "|" + sumTp2only + "|" + sumUnion + "|");
+			
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

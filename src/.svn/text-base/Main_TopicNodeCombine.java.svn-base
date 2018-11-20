@@ -1,0 +1,71 @@
+import java.io.*;
+import java.util.*;
+
+public class Main_TopicNodeCombine {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		if(args.length > 0) {
+			valid = "valid_";
+		}
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// File names
+    	//String dir = "data/plurk_iii/message_node";
+		String dir = "data/plurk_iii/mr_node";
+    	
+		TreeMap<String, String> tm = new TreeMap<String, String>();
+		tm = combine("train", valid, encoding, dir, tm);
+    	tm = combine("test", valid, encoding, dir, tm);
+    	
+    	//FileOutputStream fos = new FileOutputStream(dir + "/split_user_allmessage_" + valid + "all.txt");
+		FileOutputStream fos = new FileOutputStream(dir + "/split_user_allmessage_response_" + valid + "all.txt");
+		OutputStreamWriter osw = new OutputStreamWriter(fos, encoding);
+		BufferedWriter bw = new BufferedWriter(osw);
+    	for(String s : tm.keySet()) {
+    		bw.write(s + " " + tm.get(s) + "\n");
+    	}		
+    	bw.flush();
+		bw.close();
+		osw.close();
+		fos.close();		
+	}
+	
+	public static TreeMap<String, String> combine(String type, String valid, String encoding, String dir, TreeMap<String, String> tm) throws Exception {
+		//FileInputStream fis = new FileInputStream(dir + "/split_user_allmessage_" + valid + type + ".txt");
+		FileInputStream fis = new FileInputStream(dir + "/split_user_allmessage_response_" + valid + type + ".txt");
+		InputStreamReader isr = new InputStreamReader(fis, encoding);
+		LineNumberReader lnr = new LineNumberReader(isr);
+		String s = null;
+		int count = 0;
+		while ((s=lnr.readLine()) != null) {
+			if(count%1000 == 0) {
+				System.out.println("Count = " + count);
+			}
+			if(s.length() > 0) {
+				String[] t = s.split(" ");
+				String n = t[0];
+				String words = t[1];
+				for(int i=2; i<t.length; i++) {
+					words += " " + t[i];
+				}
+				if(tm.containsKey(n)) {
+					tm.put(n, tm.get(n) + " " + words);
+				}
+				else {
+					tm.put(n, words);
+				}
+			}
+			count++;
+		}					
+		lnr.close();
+		isr.close();
+		fis.close();
+		return tm;
+	}
+}

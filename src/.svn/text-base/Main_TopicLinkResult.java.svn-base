@@ -1,0 +1,55 @@
+import java.io.*;
+
+import utility.Utility;
+
+public class Main_TopicLinkResult {
+
+	public static void main(String[] args) throws Exception {
+
+		// Parameter
+		int numTopics = 7;
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Level
+		String level = "_link";
+
+		// File names
+		String documentTopicFileName = "topic/" + valid + "doctopic" + level + ".txt";
+		String resultFileName = "topic/" + valid + "lda" + level + ".txt";
+    	
+		FileInputStream fis = new FileInputStream(documentTopicFileName);
+		InputStreamReader isr = new InputStreamReader(fis, encoding);
+		LineNumberReader lnr = new LineNumberReader(isr);
+		PrintWriter pw = new PrintWriter(resultFileName);
+		double[] result = new double[numTopics];
+		String s = lnr.readLine();
+		while ((s=lnr.readLine()) != null) {
+			if(s.length() > 0) {
+				String[] t = s.split("\t");
+				int topics = (t.length/2)-1;
+				for(int j=0; j<topics; j++) {
+					int id = Integer.parseInt(t[j*2+2]);
+					double score = Double.parseDouble(t[j*2+3]);
+					result[id] = score;
+				}
+				pw.print(result[0]);
+				for(int j=1; j<result.length; j++) {
+					pw.print("," + result[j]);
+				}
+				pw.println();
+			}
+		}
+		pw.flush();
+		pw.close();
+		lnr.close();
+		isr.close();
+		fis.close();
+		Utility.extractFile(resultFileName, 1000);
+	}
+}

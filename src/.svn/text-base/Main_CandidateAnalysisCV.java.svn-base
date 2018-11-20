@@ -1,0 +1,54 @@
+import java.util.*;
+import utility.*;
+import network.*;
+
+public class Main_CandidateAnalysisCV {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Fold
+		int fold = 1;
+			
+		// File names
+    	String testListFileName = "list/cv" + fold + "_test.txt";
+    	
+    	// Dataset
+    	String dataset = "plurk";
+    	
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Diffusion Network
+    	System.out.print("Loading networks ... ");
+    	DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_cv" + fold + "_train_test_unweighted.txt");
+    	System.out.println("done.");
+    	
+		// Candidate analysis
+    	System.out.println();
+    	System.out.println("====== Fold " + fold + " ======");
+		System.out.println("^Topic^Number^");
+    	int[] testConcepts = Utility.loadIntegerArray(testListFileName);
+		int totalSum = 0;
+		TreeSet<String> totalUnique = new TreeSet<String>(); 
+		for(int testConcept : testConcepts) {
+    		long[] aggresives = Utility.loadLongArray("data/" + dataset + "_iii/cv" + fold + "/test/aggresive_" + testConcept + "_test.txt");		
+    		int total = 0;
+   			for(long uid1 : aggresives) {
+   				for(long uid2 : dn.getSuccessors(uid1)) {
+   					total++;
+   					totalSum++;
+   					totalUnique.add(uid1 + "_" + uid2);
+   				}
+   			}	    		
+			System.out.println("|" + testConcept + "|" + total + "|");
+    	}
+		System.out.println("|Total|" + totalSum + "|"); 
+		System.out.println("|Unique|" + totalUnique.size() + "|"); 
+    
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}
