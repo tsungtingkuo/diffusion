@@ -1,0 +1,43 @@
+import java.util.*;
+import network.*;
+
+public class Main_DNClearWeight {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		if(args.length > 0) {
+			valid = "valid_";
+		}
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Combine diffusion networks
+		String inputFileName = "dna/dn_" + valid + "train_test.txt";
+		String outputFileName = "dna/dn_" + valid + "train_test_unweighted.txt";
+		DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork(inputFileName);
+		DiffusionNetworkFactory.saveDiffusionNetworkUnweighted(dn, outputFileName);
+		
+		// Load diffusion network
+		System.out.println("Vertex = " + dn.getVertexCount());
+		System.out.println("Edge = " + dn.getEdgeCount());
+		
+		// Connected component
+		Vector<Integer> sizes = new Vector<Integer>();
+		Set<Set<Long>> connectedComponents = Statistics.getConnectedComponent(dn);
+		for(Set<Long> component : connectedComponents) {
+			sizes.add(component.size());
+		}
+		TreeSet<Integer> ts = new TreeSet<Integer>(sizes);
+		System.out.println("GCC = " + ts.last());
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

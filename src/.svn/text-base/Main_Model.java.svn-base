@@ -1,0 +1,44 @@
+import java.util.*;
+import network.*;
+
+public class Main_Model {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Load network
+		//Network n = NetworkFactory.getNetwork("data/user_table", "data/relation_table");
+		Network n = NetworkFactory.getNetwork(false, "data/user_table", "data/relation_table", "data/user_location_country", "data/user_location_city", "data/user_location_state", "data/user_relationship");
+		System.out.println("Vertex = " + n.getVertexCount());
+		System.out.println("Edge = " + n.getEdgeCount());
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+		
+		System.out.println("Compting model, first iteration ...");
+		// Do first iteration
+		// Note that calling n.isConverged() is meaningless here
+		Random r = new Random();
+		for(long id : n.getVertices()) {
+			User u = n.getUser(id);
+			u.setState((r.nextInt(User.TOTAL_STATE_NUMBER)));
+		}
+		
+		do {
+			System.out.println("Computing model, repeated iteration ...");
+			// Do second or later iterations here
+			// Call n.isConverged() for convergence test
+			for(long id : n.getVertices()) {
+				User u = n.getUser(id);
+				u.setState(u.getState());
+			}
+		}
+		while(!n.isConverged());
+		System.out.println("Model converged!");
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

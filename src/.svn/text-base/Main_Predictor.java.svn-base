@@ -1,0 +1,275 @@
+import java.io.*;
+import java.util.*;
+
+import classifier.*;
+import predictor.*;
+import utility.*;
+import network.*;
+
+@SuppressWarnings("unused")
+public class Main_Predictor {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Classifier
+		//String classifier = "liblinear";
+		String classifier = "libsvm";
+		//String classifier = args[0];
+
+		// Instance
+		//int instance = MyLibSVM.INSTANCE_LINK;
+		int instance = MyLibSVM.INSTANCE_LINKTOPIC;
+		//int instance = Integer.parseInt(args[1]);
+		
+		// Feature
+		//int feature = MyLibSVM.FEATURE_NONTOPIC;
+		//int feature = MyLibSVM.FEATURE_TOPIC;
+		//int feature = MyLibSVM.FEATURE_BOTH;
+		//int feature = Integer.parseInt(args[2]);
+		int feature = Integer.parseInt(args[0]);
+		
+		// Parameter
+		String w = "30";
+		//String w = args[3];
+		String c = "0.01";
+		//String c = args[4];
+
+		// Name
+		//String sim = "jaccard";
+		String sim = "lda";
+		//String sim = "lda_message_sum";
+		//String sim = "lda_message_average";
+		//String sim = "lda_mr";
+		//String sim = "category";
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		
+		// Parameters
+		int k = 12;
+		int d = 1;
+		int support = 5;
+		int aucRepeat = 50;
+		double aucConfidenceLevel = 0.95;
+		String substring = "";
+		
+		// Result name
+		String result = "";
+		
+		// File names
+    	String trainListFileName = "list/" + valid + "train.txt";
+    	String testListFileName = "list/" + valid + "test.txt";
+		String patternPrefix = "pattern/" + valid + "train_" + support + "_";
+    	if(!substring.equalsIgnoreCase("")) {
+    		patternPrefix = "pattern/" + valid + "train_" + substring + "_" + support + "_";
+    	}
+    	String patternPostfix = ".txt";
+    	
+    	// Dataset
+    	String dataset = "plurk";
+    	
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Diffusion Network
+    	System.out.print("Loading networks ... ");
+    	DiffusionNetwork dntrain = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/dn_" + valid + "train_content.txt");
+    	DiffusionNetwork dn = dntrain;
+//    	DiffusionNetwork dntrain = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_" + valid + "train_time.txt");
+//    	DiffusionNetwork dn = dntrain;
+//    	DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/dn_" + valid + "train_content.txt");
+//    	DiffusionNetwork dntrain = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/train_1_1_dn.txt");
+//    	DiffusionNetwork dntrain = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/train_href_1_1_dn.txt");
+//    	DiffusionNetwork dntrain = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/train_img_1_1_dn.txt");
+//    	DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/dn_" + valid + "train_content.txt");
+    	//DiffusionNetwork dn = DiffusionNetworkFactory.getDiffusionNetwork("dna/dn_" + valid + "train_test_unweighted.txt");
+    	System.out.println("done.");
+    	
+		// Predictor and parameters
+   	
+//    	InterAggressiveUserPredictor p = new InterAggressiveUserPredictor(dn, dntrain);
+//    	result += "_inter_au";
+    	
+//    	AllNeighborsPredictor p = new AllNeighborsPredictor(dn, dntrain);
+//    	result += "_all_neighbor"; 
+
+//    	PerfectKNeighborsPredictor p = new PerfectKNeighborsPredictor(dn, dntrain);
+//    	p.setK(k);    	
+//    	result += "_perfect_" + k + "_neighbor"; 
+
+//    	GuidedKNeighborsPredictor p = new GuidedKNeighborsPredictor(dn, dntrain);
+//    	p.setFeature(feature);
+//    	p.setK(k);    	
+//    	result += "_" + feature + "_guided_" + k + "_neighbor"; 
+
+//    	TimeGuidedKNeighborsPredictor p = new TimeGuidedKNeighborsPredictor(dn, dntrain);
+//    	p.setK(k);    	
+//    	p.setValid(valid);
+//    	result += "_time_guided_" + k + "_neighbor"; 
+
+//    	PageRankGuidedKNeighborsPredictor p = new PageRankGuidedKNeighborsPredictor(dn, dntrain);
+//    	p.setK(k);    	
+//    	result += "_pr_" + k + "_neighbor"; 
+
+//    	TopicGuidedKNeighborsPredictor p = new TopicGuidedKNeighborsPredictor(dn, dntrain);
+//    	p.setK(k);    	
+//    	p.setValid(valid);
+//    	p.setSim(sim);
+//    	result += "_" + sim + "_guided_" + k + "_neighbor"; 
+
+//    	TopicTimeGuidedKNeighborsPredictor p = new TopicTimeGuidedKNeighborsPredictor(dn, dntrain);
+//    	p.setK(k);    	
+//    	p.setValid(valid);
+//    	p.setSim(sim);
+//    	result += "_" + sim + "_time_guided_" + k + "_neighbor"; 
+
+//    	TopicPageRankGuidedKNeighborsPredictor p = new TopicPageRankGuidedKNeighborsPredictor(dn, dntrain);
+//    	p.setK(k);    	
+//    	p.setValid(valid);
+//    	p.setSim(sim);
+//    	result += "_" + sim + "_pr_" + k + "_neighbor"; 
+
+//    	LibSVMPredictor p = new LibSVMPredictor(dn, dntrain);
+//    	p.setDataset(dataset);
+//    	p.setClassifier(classifier);
+//    	p.setValid(valid);
+//    	p.setW(w);
+//    	p.setC(c);
+//    	p.setInstance(instance);
+//    	p.setFeature(feature);
+//    	p.initializeSVM();
+//    	result += "_" + classifier + "_" + instance + "_" + feature + "_" + w;
+
+//    	DecisionValueGuidedKNeighborsPredictor p = new DecisionValueGuidedKNeighborsPredictor(dn, dntrain);
+//    	p.setK(k);    	
+//    	p.setDataset(dataset);
+//    	p.setClassifier(classifier);
+//    	p.setValid(valid);
+//    	p.setW(w);
+//    	p.setC(c);
+//    	p.setInstance(instance);
+//    	p.setFeature(feature);
+//    	result += "_" + classifier + "_" + instance + "_" + feature + "_" + w + "_guided_" + k + "_neighbor";
+
+    	LibSVMGuidedKNeighborsPredictor p = new LibSVMGuidedKNeighborsPredictor(dn, dntrain);
+    	p.setK(k);    	
+    	p.setDataset(dataset);
+    	p.setClassifier(classifier);
+    	p.setValid(valid);
+    	p.setW(w);
+    	p.setC(c);
+    	p.setInstance(instance);
+    	p.setFeature(feature);
+    	p.initializeSVM();
+    	result += "_" + classifier + "_" + instance + "_" + feature + "_" + w + "_guided_" + k + "_neighbor";
+
+    	// Prediction and evaluation
+    	String resultFileName = "result/" + valid + "result" + result + ".txt";
+    	PrintWriter pw = new PrintWriter(resultFileName);
+    	System.out.println();
+//		System.out.println("^Topic^Ground^Prediction^TP^Precision^Recall^F1^AUC^");
+//		pw.println("^Topic^Ground^Prediction^TP^Precision^Recall^F1^AUC^");
+		System.out.println("^Topic^AUC^Stdev^95%CI^");
+		pw.println("^Topic^AUC^Stdev^95%CI^");
+    	int[] testConcepts = Utility.loadIntegerArray(testListFileName);
+//		int groundSum = 0;
+//		int predictionSum = 0;
+//		int tpSum = 0;
+		double aucSum = 0.0;
+		double aucSDSum = 0.0;
+		double aucCISum = 0.0;
+//		double spearmanSum = 0.0;
+//		double nonZeroSpearmanSum = 0.0;
+		
+		// Category
+//		TreeMap<Integer, Integer> topicToCategory = Utility.loadIntegerToIntegerTreeMap("list/all_category.txt");
+//		int categoryNumber = 7;
+
+		for(int testConcept : testConcepts) {
+ 
+			// Category-models
+//			int category = topicToCategory.get(testConcept);
+//			DiffusionNetwork dntrain = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/dn_" + valid + "train_content_" + category + ".txt");
+//			DiffusionNetwork dntrain = DiffusionNetworkFactory.getDiffusionNetwork("patterndn/train_1_1_" + category + "_dn.txt");
+			
+//	    	TopicGuidedKNeighborsPredictor p = new TopicGuidedKNeighborsPredictor(dn, dntrain);
+//	    	p.setK(k);    	
+//	    	p.setValid(valid);
+//	    	p.setSim(sim);
+//	    	p.setCategory(category);
+	
+			long[] aggresives = Utility.loadLongArray("data/" + dataset + "_iii/" + valid + "test/aggresive_" + testConcept + "_test.txt");
+    		
+			DiffusionNetwork gdn = DiffusionNetworkFactory.getDiffusionNetwork("data/" + dataset + "_iii/" + valid + "test/dn_" + testConcept + "_test.txt");
+
+			// Predictors can be cascaded
+			//p.setGround(gdn);
+    		DiffusionNetwork pdn = p.predict(testConcept, aggresives);
+    		//pdn = p2.predict(pdn, testConcept, aggresives);
+    		
+			DiffusionNetworkScorer dns = new DiffusionNetworkScorer(gdn, pdn, testConcept, aucRepeat, aucConfidenceLevel);
+			
+//			int ground = dns.getGrounds();
+//			int prediction = dns.getPredictions();
+//			int tp = dns.getTp();
+//			double precision = dns.getPrecision();
+//			double recall = dns.getRecall();
+//			double f1 = dns.getF1();
+			//double auc = dns.getAuc();
+			//double aucSD = dns.getAucStandardDeviation();
+			//double aucCI = dns.getAucConfidenceInterval();
+//			double spearman = dns.getSpearman();
+//			double nonZeroSpearman = dns.getNonZeroSpearman();
+			
+//			groundSum += ground;
+//			predictionSum += prediction;
+//			tpSum += tp;
+			//aucSum += auc;
+			//aucSDSum += aucSD;
+			//aucCISum += aucCI;
+//			spearmanSum += spearman;
+//			nonZeroSpearmanSum += nonZeroSpearman;
+			
+//			System.out.print("|" + testConcept + "|" + ground + "|" + prediction + "|" + tp);
+//			System.out.printf("|%.2f%%|%.2f%%|%.2f%%|%.2f%%|", precision*100, recall*100, f1*100, auc*100);
+//			System.out.println();
+			//System.out.printf("|" + testConcept + "|%.2f%%|%.2f%%|%.2f%%|\n", auc*100, aucSD*100, aucCI*100);
+			
+//			pw.print("|" + testConcept + "|" + ground + "|" + prediction + "|" + tp);
+//			pw.printf("|%.2f%%|%.2f%%|%.2f%%|%.2f%%|", precision*100, recall*100, f1*100, auc*100);
+//			pw.println();
+			//pw.printf("|" + testConcept + "|%.2f%%|%.2f%%|%.2f%%|\n", auc*100, aucSD*100, aucCI*100);
+    	}
+//		double precisionAll = (double)tpSum / (double)predictionSum;
+//		double recallAll = (double)tpSum / (double)groundSum;
+//		double f1All = 2*precisionAll*recallAll/(precisionAll+recallAll);
+		double aucAll = (double)aucSum / (double)testConcepts.length;
+		double aucSDAll = (double)aucSDSum / (double)testConcepts.length;
+		double aucCIAll = (double)aucCISum / (double)testConcepts.length;
+//		double spearmanAll = (double)spearmanSum / (double)testConcepts.length;
+//		double nonZeroSpearmanAll = (double)nonZeroSpearmanSum / (double)testConcepts.length;
+		
+//		System.out.print("|Total|" + groundSum + "|" + predictionSum + "|" + tpSum + "|"); 
+//		System.out.printf("%.2f%%|%.2f%%|**%.2f%%**|**%.2f%%**|", precisionAll*100, recallAll*100, f1All*100, aucAll*100);
+//		System.out.println();
+		System.out.printf("|Total|**%.2f%%**|%.2f%%|%.2f%%|\n", aucAll*100, aucSDAll*100, aucCIAll*100);
+    
+//		pw.print("|Total|" + groundSum + "|" + predictionSum + "|" + tpSum + "|"); 
+//		pw.printf("%.2f%%|%.2f%%|**%.2f%%**|**%.2f%%**|", precisionAll*100, recallAll*100, f1All*100, aucAll*100);
+//		pw.println();
+		pw.printf("|Total|**%.2f%%**|%.2f%%|%.2f%%|\n", aucAll*100, aucSDAll*100, aucCIAll*100);
+
+		pw.flush();
+    	pw.close();
+		
+		// Print parameters
+		Utility.printStringArray(args, args.length);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed minutes = " + elapsedTime/60000);
+	}
+}

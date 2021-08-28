@@ -1,0 +1,11 @@
+public class Main_RWBruteForce{
+	public static void main( String[] argv ) throws Exception{
+		for(int i=10000; i<=640000; i+=10000) {
+			System.out.println("****************");
+			System.out.println("RW = " + i);
+			System.out.println("****************");
+			String[] args = {Integer.toString(i)};
+			Main_RW.main(args);
+		}
+	}
+}

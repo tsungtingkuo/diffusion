@@ -1,0 +1,46 @@
+import java.util.*;
+import utility.*;
+
+public class Main_CrossValidationTestCategory{
+	public static void main( String[] argv ) throws Exception {
+
+		int topics = 99;
+		//int topics = 100;
+		int hiddens = 7;
+		int folders = 4;
+
+		TreeMap<Integer, Integer> category = Utility.loadIntegerToIntegerTreeMap("list/all_category.txt");
+		int[] all = new int[topics];
+		int index = 0;
+		for(int c=0; c<hiddens; c++) {
+			int[] cats = Utility.getKeysOfIntegerToIntegerTreeMap(category, c+1);
+			cats = Utility.shuffleIntegerArray(cats);
+			for(int t : cats) {
+				all[index] = t;
+				index++;
+			}
+		}
+				
+		TreeMap<Integer, Integer> messages = Utility.loadIntegerToIntegerTreeMap("list/all_message.txt");
+		Vector<Vector<Integer>> testVectors = new Vector<Vector<Integer>>();
+		for(int f=0; f<folders; f++) {
+			testVectors.add(new Vector<Integer>());
+		}		
+		for(int i=0; i<topics; i++) {
+			testVectors.get(i%folders).add(all[i]);
+		}			
+		for(int f=0; f<folders; f++) {
+			Vector<Integer> v = testVectors.get(f); 
+			Collections.sort(v);
+			int[] test = Utility.integerVectorToIntegerArray(v);
+			Utility.saveIntegerArray("list/cv" + (f+1) + "_test.txt", test);
+			int size = 0;
+			for(int t : test) {
+				System.out.print(t + "(" + messages.get(t) + ") ");
+				size += messages.get(t);
+			}
+			System.out.println();
+			System.out.println(size);
+		}
+	}
+}

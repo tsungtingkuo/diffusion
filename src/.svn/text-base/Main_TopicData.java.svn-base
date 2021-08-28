@@ -1,0 +1,63 @@
+import java.io.*;
+import utility.*;
+
+public class Main_TopicData {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Level
+		//String level = "";
+		//String level = "_message";
+		String level = "_mr";
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// File names
+		String listFileName = "list/all.txt";
+    	String outputFileName = "topic/doc" + level + ".txt";
+    	
+    	String messageDir = "data/plurk_iii/message";
+		if(level.equalsIgnoreCase("_mr")) {
+			messageDir = "data/plurk_iii/mr";
+		}
+		
+    	String prefix = "split_filter_message_concept";
+		String postfix = "_plurk_cleaned.txt";
+		if(level.equalsIgnoreCase("_mr")) {
+			prefix = "message_response_";
+			postfix = "_train.txt";
+		}
+    	
+    	int[] concepts = Utility.loadIntegerArray(listFileName);
+		FileOutputStream fos = new FileOutputStream(outputFileName);
+		OutputStreamWriter osw = new OutputStreamWriter(fos, encoding);
+		BufferedWriter bw = new BufferedWriter(osw);
+		for(int c : concepts) {
+			FileInputStream fis = new FileInputStream(messageDir + "/" + prefix + c + postfix);
+			InputStreamReader isr = new InputStreamReader(fis, encoding);
+			LineNumberReader lnr = new LineNumberReader(isr);
+			String s = null;
+			while ((s=lnr.readLine()) != null) {
+				if(s.length() > 0) {
+					if(!level.equalsIgnoreCase("_message")) {
+						bw.write(s);
+					}
+					else {
+						bw.write(s + "\n");
+					}
+				}
+			}					
+			lnr.close();
+			isr.close();
+			fis.close();
+			if(!level.equalsIgnoreCase("_message")) {
+				bw.write("\n");
+			}
+		}
+		bw.flush();
+		bw.close();
+		osw.close();
+		fos.close();		
+	}
+}

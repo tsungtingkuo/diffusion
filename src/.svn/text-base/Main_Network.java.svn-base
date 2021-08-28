@@ -1,0 +1,33 @@
+import java.util.*;
+import network.*;
+
+public class Main_Network {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Dataset
+		String dataset = "plurk";
+		//String dataset = "facebook";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load network
+		//Network n = NetworkFactory.getNetwork(false, "data/user_table", "data/relation_table", "data/user_location_country", "data/user_location_city", "data/user_location_state", "data/user_relationship", "data/user_registration_time");
+		Network n = NetworkFactory.getNetwork(true, "data/" + dataset + "_iii/user_" + dataset + ".txt", "data/" + dataset + "_iii/relation_" + dataset + ".txt");
+		//Network n = NetworkFactory.getNetwork(true, "data/" + dataset + "_iii_plasticizer/user_" + dataset + ".txt", "data/" + dataset + "_iii_plasticizer/relation_" + dataset + ".txt");
+		System.out.println("User = " + n.getUserCount());
+		System.out.println("Vertex = " + n.getVertexCount());
+		System.out.println("Edge = " + n.getEdgeCount());
+
+		// Save relation
+		//NetworkFactory.saveRelation(n, "data/plurk_iii/relation_plurk_cleaned.txt");
+		//NetworkFactory.saveRelation(n, "data/facebook_iii/relation_facebook_cleaned.txt");
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

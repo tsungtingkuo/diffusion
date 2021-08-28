@@ -1,0 +1,56 @@
+import java.io.*;
+
+public class Main_TopicNodeData {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		
+		// Level
+		//String level = "_node";
+		String level = "_mr_node";
+			
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// File names
+    	//String inputDir = "data/plurk_iii/message_node";
+		String inputDir = "data/plurk_iii/mr_node";
+    	String nFileName = "topic/" + valid + "n" + level + ".txt";
+    	String outputFileName = "topic/" + valid + "doc" + level + ".txt";
+    	
+    	PrintWriter pw = new PrintWriter(nFileName);
+		FileOutputStream fos = new FileOutputStream(outputFileName);
+		OutputStreamWriter osw = new OutputStreamWriter(fos, encoding);
+		BufferedWriter bw = new BufferedWriter(osw);
+
+		//FileInputStream fis = new FileInputStream(inputDir + "/split_user_allmessage_" + valid + "all.txt");
+		FileInputStream fis = new FileInputStream(inputDir + "/split_user_allmessage_response_" + valid + "all.txt");
+		InputStreamReader isr = new InputStreamReader(fis, encoding);
+		LineNumberReader lnr = new LineNumberReader(isr);
+		String s = null;
+		while ((s=lnr.readLine()) != null) {
+			if(s.length() > 0) {
+				String[] t = s.split(" ");
+				pw.println(t[0]);
+				bw.write(t[1]);
+				for(int i=2; i<t.length; i++) {
+					bw.write(" " + t[i]);
+				}
+				bw.write("\n");
+			}
+		}					
+		lnr.close();
+		isr.close();
+		fis.close();
+		
+    	bw.flush();
+		bw.close();
+		osw.close();
+		fos.close();		
+		pw.flush();
+		pw.close();
+	}
+}

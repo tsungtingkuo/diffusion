@@ -1,0 +1,92 @@
+package main;
+import java.io.*;
+import java.util.*;
+
+import utility.*;
+//import network.*;
+
+public class Main_DataDNCV {
+
+	public static void main(String[] args) throws Exception {
+				
+		// Parameter
+		String type = args[0];
+		int fold = Integer.parseInt(args[1]);
+
+		// Dataset
+		String dataset = "plurk";
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// File names
+    	String listFileName = "list/cv" + fold + "_" + type + ".txt";
+
+    	// Split data
+    	int[] concepts = Utility.loadIntegerArray(listFileName);
+    	for(int concept : concepts) {
+    		System.out.print("Preparing fold " + fold + ", concept " + concept + " ... ");
+    		if(type.equalsIgnoreCase("train")) {
+	    		TreeMap<String, Double> weight = new TreeMap<String, Double>();
+	    		TreeMap<String, Double> length = new TreeMap<String, Double>();
+	    		TreeMap<String, Double> href = new TreeMap<String, Double>();
+	    		TreeMap<String, Double> img = new TreeMap<String, Double>();
+	    		String[] data = Utility.loadStringArray("data/" + dataset + "_iii/cv" + fold + "/" + type + "/sorted_" + concept + "_" + type + ".txt");
+	    		for(String s : data) {
+	    			String[] t = s.split("\t");
+	    			String d = t[0] + "\t" + t[1];
+	    			double a = 1.0;
+	    			double w = (double)1.0*(double)a;
+	    			double l = (double)t[3].length()*(double)a;
+	    			double h = (double)Utility.computeSubstring(t[3], "href")*(double)a;
+	    			double i = (double)Utility.computeSubstring(t[3], "img")*(double)a;
+	    			if(weight.containsKey(d)) {
+	    				weight.put(d, weight.get(d) + w);
+	    				length.put(d, length.get(d) + l);
+	    				href.put(d, href.get(d) + h);
+	    				img.put(d, img.get(d) + i);
+	    			}
+	    			else {
+	    				weight.put(d, w);
+	    				length.put(d, l);
+	    				href.put(d, h);
+	    				img.put(d, i);
+	    			}
+	    		}
+	    		PrintWriter pw = new PrintWriter("data/" + dataset + "_iii/cv" + fold + "/" + type + "/dn_" + concept + "_" + type + ".txt");
+	    		for(String d : weight.keySet()) {
+	    			pw.println(d + "\t" + weight.get(d) + "\t" + length.get(d) + "\t" + href.get(d) + "\t" + img.get(d));
+	    		}
+	    		pw.flush();
+	    		pw.close();
+    		}
+    		else {
+        		TreeMap<String, Integer> dn = new TreeMap<String, Integer>();
+        		String[] data = Utility.loadStringArray("data/" + dataset + "_iii/cv" + fold + "/" + type + "/sorted_" + concept + "_" + type + ".txt");
+        		for(String s : data) {
+        			String[] t = s.split("\t");
+        			String d = t[0] + "\t" + t[1];
+        			if(dn.containsKey(d)) {
+        				dn.put(d, dn.get(d) + 1);
+        			}
+        			else {
+        				dn.put(d, 1);
+        			}
+        		}
+        		PrintWriter pw = new PrintWriter("data/" + dataset + "_iii/cv" + fold + "/" + type + "/dn_" + concept + "_" + type + ".txt");
+        		for(String d : dn.keySet()) {
+        			pw.println(d + "\t" + dn.get(d));
+        		}
+        		pw.flush();
+        		pw.close();
+    		}
+    		System.out.println("done.");
+    	}
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

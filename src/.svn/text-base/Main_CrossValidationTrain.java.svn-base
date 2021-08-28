@@ -1,0 +1,22 @@
+import utility.*;
+
+public class Main_CrossValidationTrain{
+	public static void main( String[] argv ) throws Exception {
+
+		int folders = 4;
+				
+		int[] all = Utility.loadIntegerArray("list/all.txt");
+		for(int f=0; f<folders; f++) {
+			int[] test = Utility.loadIntegerArray("list/cv" + (f+1) + "_test.txt");
+			int[] train = new int[all.length - test.length];
+			int index = 0;
+			for(int a : all) {
+				if(Utility.firstIndexOfIntegerArray(test, a) == -1) {
+					train[index] = a;
+					index++;
+				}
+			}
+			Utility.saveIntegerArray("list/cv" + (f+1) + "_train.txt", train);
+		}
+	}
+}

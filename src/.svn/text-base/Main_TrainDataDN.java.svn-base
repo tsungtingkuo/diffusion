@@ -1,0 +1,74 @@
+import java.io.*;
+import java.util.*;
+import utility.*;
+//import network.*;
+
+public class Main_TrainDataDN {
+
+	public static void main(String[] args) throws Exception {
+				
+		// Validation
+		String valid = "";
+		//String valid = "valid_";
+		if(args.length > 0) {
+			valid = "valid_";
+		}
+
+		// File names
+    	String listFileName = "list/" + valid + "train.txt";
+    	
+		// Dataset
+		String dataset = "plurk";
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Split data
+    	int[] concepts = Utility.loadIntegerArray(listFileName);
+    	for(int concept : concepts) {
+    		System.out.print("Preparing concept " + concept + " ... ");
+    		TreeMap<String, Double> weight = new TreeMap<String, Double>();
+    		TreeMap<String, Double> length = new TreeMap<String, Double>();
+    		TreeMap<String, Double> href = new TreeMap<String, Double>();
+    		TreeMap<String, Double> img = new TreeMap<String, Double>();
+    		String[] data = Utility.loadStringArray("data/" + dataset + "_iii/" + valid + "train/sorted_" + concept + "_train.txt");
+    		//DiffusionNetwork dnTime = DiffusionNetworkFactory.getDiffusionNetwork("dna/time/dn_" + valid + "train_time_" + concept + ".txt");
+    		for(String s : data) {
+    			String[] t = s.split("\t");
+    			String d = t[0] + "\t" + t[1];
+    			//double a = Time.getAgeInDayPlusOneTransformed(t[2]);
+    			//double a = dnTime.getOutWeightPlusOne(Long.parseLong(t[0]), Long.parseLong(t[1]));
+    			double a = 1.0;
+    			double w = (double)1.0*(double)a;
+    			double l = (double)t[3].length()*(double)a;
+    			double h = (double)Utility.computeSubstring(t[3], "href")*(double)a;
+    			double i = (double)Utility.computeSubstring(t[3], "img")*(double)a;
+    			if(weight.containsKey(d)) {
+    				weight.put(d, weight.get(d) + w);
+    				length.put(d, length.get(d) + l);
+    				href.put(d, href.get(d) + h);
+    				img.put(d, img.get(d) + i);
+    			}
+    			else {
+    				weight.put(d, w);
+    				length.put(d, l);
+    				href.put(d, h);
+    				img.put(d, i);
+    			}
+    		}
+    		PrintWriter pw = new PrintWriter("data/" + dataset + "_iii/" + valid + "train/dn_" + concept + "_train.txt");
+    		for(String d : weight.keySet()) {
+    			pw.println(d + "\t" + weight.get(d) + "\t" + length.get(d) + "\t" + href.get(d) + "\t" + img.get(d));
+    		}
+    		pw.flush();
+    		pw.close();
+    		System.out.println("done.");
+    	}
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

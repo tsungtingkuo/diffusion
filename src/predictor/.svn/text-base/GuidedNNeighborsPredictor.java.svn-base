@@ -1,0 +1,62 @@
+package predictor;
+
+import java.util.*;
+import utility.*;
+import network.*;
+
+public class GuidedKNeighborsPredictor extends DoNothingPredictor {
+	
+	int k = 1;
+
+	public long[] selectTopK(Vector<Long> candidates, long sourceId, int k) {
+		TreeMap<Long, Double> tm = new TreeMap<Long, Double>();
+		for(long id : candidates) {
+			double value = this.dnt.getOutWeightPlusOne(sourceId, id);
+			//double value = this.dnt.getOutLengthPlusOne(sourceId, id);
+			//double value = this.dnt.getOutHrefPlusOne(sourceId, id);
+			//double value = this.dnt.getOutImgPlusOne(sourceId, id);
+			//double value = (double)this.dnt.commonNeighborPlusOne(sourceId, id);
+			tm.put(id, value);
+		}
+		return Utility.getTopValuedLongToDoubleKeys(tm, k, true);
+	}
+	
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+	
+		// Random select k neighbors
+		for(long uid1 : aggresives) {
+			Vector<Long> candidates = getCandidates(uid1);
+			if(candidates.size() <= k) {
+				for(int i=0; i<candidates.size(); i++) {
+					result = this.activate(result, uid1, candidates.get(i));
+				}
+			}
+			else {
+				long[] uid2s = this.selectTopK(candidates, uid1, k);
+				for(long uid2 : uid2s) {
+					result = this.activate(result, uid1, uid2);
+				}
+			}			
+		}
+		
+		return result;
+	}
+
+	public GuidedKNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) {
+		super(dn, dnt);
+	}
+
+	/**
+	 * @return the k
+	 */
+	public int getK() {
+		return k;
+	}
+
+	/**
+	 * @param k the k to set
+	 */
+	public void setK(int k) {
+		this.k = k;
+	}
+}

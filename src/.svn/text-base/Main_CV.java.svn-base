@@ -1,0 +1,47 @@
+import java.util.*;
+
+public class Main_CV {
+
+	public static void main(String[] args) throws Exception {
+
+		// Parameter
+		int cLevel = 1;
+		double cInit = 0.0001;
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Main
+		String[] accuracyResults = new String[cLevel];
+		String[] aucResults = new String[cLevel];
+		double order = 1.0;
+		for(int i=0; i<cLevel; i++) {
+			double c = cInit * order;
+			order *= 10.0;			
+			String[] a = {args[0], args[1], Double.toString(c)};
+			Main_ClassifierCV.main(a);
+			accuracyResults[i] = Main_ClassifierCV.getAccuracyResult();
+			aucResults[i] = Main_ClassifierCV.getAucResult();
+		}
+		
+		// Accuracy
+		System.out.println();
+		System.out.println("Accuracy:");
+		for(int i=0; i<cLevel; i++) {
+			System.out.println(accuracyResults[i]);
+		}
+
+		// AUC
+		System.out.println();
+		System.out.println("AUC:");
+		for(int i=0; i<cLevel; i++) {
+			System.out.println(aucResults[i]);
+		}
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed minutes = " + elapsedTime/60000);
+	}
+}

@@ -1,0 +1,39 @@
+import java.util.*;
+import utility.*;
+
+public class Main_PeakStatistics {
+
+	public static void main(String[] args) throws Exception {
+				
+		// File names
+    	String countFile = "Date_Count_III_v3_1030_MR_100.csv";
+    	String idFile = "list/all.txt";
+    	
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Identify peaks
+		int[] ids = Utility.loadIntegerArray(idFile);
+		int[][] counts = Utility.loadInteger2DArray(countFile);
+		int[] peaks = new int[counts[0].length];
+		String[] concepts = new String[counts[0].length];
+		for(int j=0; j<concepts.length; j++) {
+			concepts[j] = "";
+		}
+		for(int i=0; i<counts.length; i++) {
+			int maxIndex = Utility.getMaxIndex(counts[i]);
+			peaks[maxIndex]++;
+			concepts[maxIndex] += ("," + ids[i]);
+		}
+		for(int j=0; j<concepts.length; j++) {
+			concepts[j] = peaks[j] + concepts[j];
+		}
+		Utility.saveStringArray("peaks.csv", concepts);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

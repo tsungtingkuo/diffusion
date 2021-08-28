@@ -1,0 +1,39 @@
+import java.util.*;
+import score.*;
+import supervised.*;
+
+public class Main_SVM_EV {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Setting name
+		String name = "pt.facebook";
+				
+		// SVM paramaters
+		String s = "4";
+		String t = "0";
+		String c = "0.01";
+		String h = "1";
+
+		// Basic information
+		System.out.println("SVM Evaluation");
+		System.out.println("Name = " + name);
+
+		// LibSVM
+		MyLibSVM svm = new MyLibSVM(name);
+		svm.preidct(s, t, c, h);
+		
+		// Load scores
+		Map<Long, Double> ground = ScoreLoader.load("score/ground/test.score.ubi.If");
+		Map<Long, Double> prediction = ScoreLoader.load(ground, "libsvm/" + name + "-scaled.txt");
+		
+		// Kendall-Tau
+		double kt = KendalltauScorer.getR(prediction, ground);
+		System.out.println("Kendall-Tau = "+ kt);
+		
+		// Spearman
+		double sm = SpearmanScorer.getR(prediction, ground);
+		System.out.println("Spearman = " + sm);
+		
+	}
+}

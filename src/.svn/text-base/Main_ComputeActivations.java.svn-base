@@ -1,0 +1,48 @@
+import java.util.*;
+import java.io.*;
+import utility.*;
+
+public class Main_ComputeActivations {
+
+	public static void main(String[] args) throws Exception {
+
+		int iii = Integer.parseInt(args[0]);
+		
+		String dirName = "result/plurk_tongtong_facebook/test";
+		String outputFileName = "activations_ttfb.csv";
+		if(iii == 1) {
+			dirName = "result/plurk_iii_concept40/test";
+			outputFileName = "activations_iii40.csv";
+		}
+		else if(iii == 2) {
+			dirName = "result/plurk_iii_plasticizer2/test";
+			outputFileName = "activations_plasticizer2.csv";
+		}
+		else if(iii == 3) {
+			dirName = "result/plurk_iii_dn_concept40/test";
+			outputFileName = "activations_iiidn40.csv";
+		}
+
+		//String dirName = "result/plurk_iii_concept40/test";
+		//String dirName = "result/plurk_tongtong_facebook/test";
+		
+		//String outputFileName = "activations.csv";
+		
+		File dir = new File(dirName);
+		System.out.println(dirName + "=" + dir.exists());
+		String fileNames[] = dir.list();
+		TreeMap<String, Integer> treeMap = new TreeMap<String, Integer>();
+		for(String fileName : fileNames) {
+			Vector<String> v = Utility.loadVector(dirName + "/" + fileName);
+			int count = 0;
+			for(String s : v) {
+				if(!s.equalsIgnoreCase("")) {
+					count++;
+				}
+			}
+			System.out.println(fileName + " = " + count + " / " + v.size());
+			treeMap.put(fileName, count);			
+		}
+		Utility.saveStringToIntegerTreeMap(treeMap, outputFileName);
+	}
+}

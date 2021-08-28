@@ -1,0 +1,45 @@
+import java.util.*;
+import classifier.*;
+
+public class Main_LibSVMData {
+	
+	public static void main(String[] args) throws Exception {
+		
+		// Classifier
+		//String classifier = "liblinear";
+		String classifier = "libsvm";
+		//String classifier = args[0];
+		
+		// Instance
+		//int instance = MyLibSVM.INSTANCE_LINK;
+		int instance = MyLibSVM.INSTANCE_LINKTOPIC;
+		//int instance = Integer.parseInt(args[1]);
+		
+		// Feature
+		//int feature = Integer.parseInt(args[2]);
+		int feature = Integer.parseInt(args[0]);
+
+		// Parameter
+		String w = "30";
+		//String w = args[3];
+		String c = "0.01";
+		//String c = args[4];
+
+		// Dataset
+    	String dataset = "plurk";
+    	
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Train (valid must be "valid_")
+		MyLibSVM svm = new MyLibSVM(dataset, classifier, "valid_", instance, feature, w, c);
+		svm.initializeData();
+		svm.prepareDataTrain();
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed minutes = " + elapsedTime/60000);
+	}
+}

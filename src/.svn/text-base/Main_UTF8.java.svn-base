@@ -1,0 +1,27 @@
+import java.util.*;
+import utility.Utility;
+
+public class Main_UTF8 {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+		String enc = System.getProperty("file.encoding");
+		 
+        System.out.println(enc);
+		// Split data
+		String s1 = Utility.getFileLine("data/message_10000.all", 18, "UTF-8");
+		String s2 = Utility.getFileLine("data/response_10000.all", 2172, "UTF-8");
+		String s3 = "¤j®a";
+		System.out.println(s1);
+		System.out.println(s2);
+		System.out.println(s1.indexOf(s3));
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

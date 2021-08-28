@@ -1,0 +1,54 @@
+package predictor;
+
+import java.util.*;
+
+import network.*;
+
+public class RandomOneNeighborOfSeedsPredictor extends BaselinePredictor {
+	
+	public DiffusionNetwork predict(int concept, long[] seeds) {
+		DiffusionNetwork result = this.setSeeds(seeds);
+
+		// Initialization
+		Random random = new Random();
+		
+		// Random select one neighbor
+		for(long uid1 : seeds) {
+			Vector<Long> candidates = getCandidates(uid1);
+			if(candidates.size() > 0) {
+				Long uid2 = candidates.get(random.nextInt(candidates.size()));
+				this.dn.getUser(uid2).setState(User.STATE_ACTIVATED);
+				Relation r = this.dn.getRelation(this.dn.findEdge(uid1, uid2));
+				result.addVertex(uid2) ;
+				result.addEdge(r.getId(), uid1, uid2);
+			}
+		}
+		
+		return result;
+	}
+
+	public boolean hasCandidates(long uid) {
+		for( Long id :  this.dn.getSuccessors(uid)){
+			User u = this.dn.getUser( id );
+			if(u.getState()==User.STATE_INACTIVATED) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Vector<Long> getCandidates(long uid) {
+		Vector<Long> candidates = new Vector<Long>();
+		for( Long id :  this.dn.getSuccessors(uid)){
+			User u = this.dn.getUser( id );
+			if(u.getState()==User.STATE_INACTIVATED) {
+				candidates.add(id);
+			}
+		}
+		return candidates;
+	}
+
+	public RandomOneNeighborOfSeedsPredictor(DiffusionNetwork dn) {
+		super(dn);
+	}
+}

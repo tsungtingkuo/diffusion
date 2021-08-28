@@ -1,0 +1,37 @@
+import java.util.*;
+import network.*;
+
+public class Main_Message {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Encoding
+		String encoding = "UTF-8";
+		
+		// Dataset
+		String dataset = "plurk";
+		//String dataset = "facebook";
+		
+		// Concept ID
+		int conceptId = 40;
+		//int conceptId = 69;
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load message
+		//MessageManager mm = new MessageManager("data/message_10000", "data/message_qualifier", "data/message_lang");
+		//MessageManager mm = new MessageManager("data/message", "data/message_qualifier", "data/message_lang");
+		MessageManager mm = new MessageManager("data/" + dataset + "_iii/message_concept" + conceptId + "_" + dataset + ".txt", encoding);
+		System.out.println(mm.getMessagesCount());
+		//for(Message m : mm.getMessagesByContentKeyword("¤j®a")) {
+		//	System.out.println(m);
+		//}
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

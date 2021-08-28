@@ -1,0 +1,42 @@
+import java.util.*;
+import network.*;
+
+public class Main_User {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Dataset
+		String dataset = "plurk";
+		//String dataset = "facebook";
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Load user
+		Network n = new Network();
+		//n  =NetworkFactory.loadUser(false, n, "data/plurk_tongtong/user_table");
+		NetworkFactory.loadUser(true, n, "data/" + dataset + "_iii/user_" + dataset + ".txt");
+		System.out.println("User = " + n.getUserCount());
+
+		// Save field
+		//NetworkFactory.extractUniqueUserInformation("data/user_table", "data/user_location_country", 3);
+		//NetworkFactory.extractUniqueUserInformation("data/user_table", "data/user_location_city", 4);
+		//NetworkFactory.extractUniqueUserInformation("data/user_table", "data/user_location_state", 5);
+		//NetworkFactory.extractUniqueUserInformation("data/user_table", "data/user_relationship", 7);
+
+		// Load user with field
+		//Network n = new Network();
+		//n = NetworkFactory.loadUser(n, "data/user_table", "data/user_location_country", "data/user_location_city", "data/user_location_state", "data/user_relationship");
+		//n = NetworkFactory.loadUser(false, n, "data/user_table", "data/user_location_country", "data/user_location_city", "data/user_location_state", "data/user_relationship", "data/user_registration_time");
+		//for(int id : n.getVertices()) {
+		//	System.out.println(n.getUser(id));
+		//}
+		//System.out.println("User = " + n.getUserCount());
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

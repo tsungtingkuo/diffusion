@@ -1,0 +1,41 @@
+import java.util.*;
+
+import edu.uci.ics.jung.algorithms.scoring.PageRank;
+import network.*;
+
+public class Main_PageRank {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Parameter
+		double alpha = 0.15;
+
+		// Load network
+		//Network n = NetworkFactory.getNetwork("data/user_table", "data/relation_table");
+		Network n = NetworkFactory.getNetwork(false, "data/user_table", "data/relation_table", "data/user_location_country", "data/user_location_city", "data/user_location_state", "data/user_relationship");
+		System.out.println("Vertex = " + n.getVertexCount());
+		System.out.println("Edge = " + n.getEdgeCount());
+
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// PageRank
+		PageRank<Long, Long> pr = new PageRank<Long, Long>(n, alpha);
+		
+		// Evaluate
+		pr.evaluate();
+
+		// Get sum
+		double sum = 0;
+		for(long v : n.getVertices()) {
+			sum += pr.getVertexScore(v);
+		}
+		System.out.println("PageRank Sum = " + sum);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

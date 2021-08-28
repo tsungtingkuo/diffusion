@@ -1,0 +1,121 @@
+package predictor;
+
+import java.util.*;
+
+import network.*;
+import utility.*;
+
+public class InterTopicPredictor extends DoNothingPredictor {
+
+	Vector<TreeMap<String, Integer>> patterns = new Vector<TreeMap<String, Integer>>();
+
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+		result = this.applyOneHopPatterns(result, aggresives);
+		return result;
+	}
+
+	public DiffusionNetwork applyOneHopPatterns(DiffusionNetwork pdn, long[] seeds) {
+		
+		// Generate pattern map
+		TreeSet<String> patternSet = new TreeSet<String>();
+		TreeMap<String, Integer> frequentPatterns = this.patterns.get(0);
+		if(frequentPatterns != null) {
+			patternSet.addAll(frequentPatterns.keySet());
+		}
+		
+		// Apply patterns
+		Vector<Long> predictedEdges = new Vector<Long>();
+		for(long v : seeds) {
+			for(String s : patternSet) {
+				String[] t = s.split("\t");
+				long uid1 = Long.parseLong(t[0]);
+				long uid2 = Long.parseLong(t[1]);
+				if(uid1==v) {
+					predictedEdges.add(dn.findEdge(uid1, uid2));
+				}
+			}
+		}
+
+		pdn = addEdges(predictedEdges, pdn);
+		
+		return pdn;
+	}
+
+	public DiffusionNetwork applyTwoHopPatterns(DiffusionNetwork pdn) {
+		
+		// Generate pattern map
+		TreeSet<String> patternSet = new TreeSet<String>();
+		TreeMap<String, Integer> frequentPatterns = this.patterns.get(1);
+		if(frequentPatterns != null) {
+			patternSet.addAll(frequentPatterns.keySet());
+		}
+		
+		// Apply patterns
+		Vector<Long> predictedEdges = new Vector<Long>();
+		for(long e : pdn.getEdges()) {
+			long source = pdn.getSource(e);
+			long dest = pdn.getDest(e);
+			for(String s : patternSet) {
+				String[] t = s.split("\t");
+				long uid1 = Long.parseLong(t[0]);
+				long uid2 = Long.parseLong(t[1]);
+				long uid3 = Long.parseLong(t[2]);
+				if(uid1==source && uid2==dest) {
+					predictedEdges.add(this.dn.findEdge(uid2, uid3));
+				}
+				if(uid2==source && uid3==dest) {
+					predictedEdges.add(this.dn.findEdge(uid1, uid2));
+				}
+			}
+		}
+		
+		pdn = addEdges(predictedEdges, pdn);
+		
+		return pdn;
+	}
+
+	public DiffusionNetwork addEdges(Vector<Long> predictedEdges, DiffusionNetwork pdn) { 
+		for(long e : predictedEdges) {
+			long source = this.dn.getSource(e);
+			long dest = this.dn.getDest(e);
+			Relation r = this.dn.getRelation(e);
+			pdn.addVertex(dest) ;
+			pdn.addEdge(r.getId(), source, dest);
+		}
+		return pdn;
+	}
+
+	public int loadPatterns(int maxHop, String prefix, String postfix, int[] conceptList) throws Exception {
+		
+		for(int i=0; i<maxHop; i++) {
+			this.patterns.add(new TreeMap<String, Integer>());
+		}
+		
+		// Load files
+		int count = 0;
+		for(int i=0; i<maxHop; i++) {
+			Vector<String> v = Utility.loadVector(prefix + (i+1) + postfix);
+			for(String s : v) {
+				String[] t = s.split(",");
+				String pattern = t[0];
+				int frequency = Integer.parseInt(t[1]);
+				this.patterns.get(i).put(pattern, frequency);
+				count++;
+			}
+		}			
+		
+		return count;
+	}
+
+	/**
+	 * @return the patterns
+	 */
+	public Vector<TreeMap<String, Integer>> getPatterns() {
+		return patterns;
+	}
+	
+	public InterTopicPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+
+}

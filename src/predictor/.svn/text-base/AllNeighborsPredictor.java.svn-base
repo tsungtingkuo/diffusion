@@ -1,0 +1,23 @@
+package predictor;
+
+import java.util.*;
+import network.*;
+
+public class AllNeighborsPredictor extends DoNothingPredictor {
+	
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+
+		// Select all neighbors
+		for(long uid1 : aggresives) {
+			Vector<Long> candidates = getCandidates(uid1);
+			for(long uid2 : candidates) {
+				result = this.activate(result, uid1, uid2, true, 1.0);
+			}
+		}
+		return result;
+	}
+
+	public AllNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+}

@@ -1,0 +1,21 @@
+import java.util.*;
+import utility.Utility;
+
+public class Main_Split {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Split data
+		Utility.extractFile("data/message", 10000);
+		Utility.extractFile("data/response", 10000);
+
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}

@@ -1,0 +1,62 @@
+package predictor;
+
+import network.*;
+
+public class TopicGuidedKNeighborsPredictor extends GuidedKNeighborsPredictor {
+	
+	String valid = "";
+	String sim = "";
+	//int category = 0;
+
+	public DiffusionNetwork predict(DiffusionNetwork result, int concept, long[] aggresives) throws Exception {
+		this.dnt = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/" + this.sim + "/dn_" + this.valid + "train_content_" + concept + ".txt");		
+		//this.dnt = DiffusionNetworkFactory.getDiffusionNetworkWithContent("dna/" + this.sim + "/dn_" + this.valid + "train_content_" + category + "_" + concept + ".txt");
+		return predictGuided(result, concept, aggresives);
+	}
+
+	public TopicGuidedKNeighborsPredictor(DiffusionNetwork dn, DiffusionNetwork dnt) throws Exception {
+		super(dn, dnt);
+	}
+
+	/**
+	 * @return the valid
+	 */
+	public String getValid() {
+		return valid;
+	}
+
+	/**
+	 * @param valid the valid to set
+	 */
+	public void setValid(String valid) {
+		this.valid = valid;
+	}
+
+	/**
+	 * @return the sim
+	 */
+	public String getSim() {
+		return sim;
+	}
+
+	/**
+	 * @param sim the sim to set
+	 */
+	public void setSim(String sim) {
+		this.sim = sim;
+	}
+
+//	/**
+//	 * @return the category
+//	 */
+//	public int getCategory() {
+//		return category;
+//	}
+//
+//	/**
+//	 * @param category the category to set
+//	 */
+//	public void setCategory(int category) {
+//		this.category = category;
+//	}
+}

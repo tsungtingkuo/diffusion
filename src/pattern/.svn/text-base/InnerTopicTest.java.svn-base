@@ -1,0 +1,83 @@
+package pattern;
+
+import java.util.*;
+import network.*;
+import utility.*;
+
+public class SequentialPatternTest {
+
+	TreeMap<Integer, Vector<TreeMap<String, Integer>>> patterns = new TreeMap<Integer, Vector<TreeMap<String, Integer>>>();
+	
+	public DiffusionNetwork applyTwoHopPatterns(DiffusionNetwork dn, DiffusionNetwork pdn) {
+		
+		// Generate pattern map
+		TreeSet<String> patternSet = new TreeSet<String>();
+		for(int concept : patterns.keySet()) {
+			TreeMap<String, Integer> frequentPatterns = this.patterns.get(concept).get(1);
+			if(frequentPatterns != null) {
+				patternSet.addAll(frequentPatterns.keySet());
+			}
+		}
+		
+		// Apply patterns
+		Vector<Long> predictedEdges = new Vector<Long>();
+		for(long e : pdn.getEdges()) {
+			long source = pdn.getSource(e);
+			long dest = pdn.getDest(e);
+			for(String s : patternSet) {
+				String[] t = s.split("\t");
+				long uid1 = Long.parseLong(t[0]);
+				long uid2 = Long.parseLong(t[1]);
+				long uid3 = Long.parseLong(t[2]);
+				if(uid1==source && uid2==dest) {
+					predictedEdges.add(dn.findEdge(uid2, uid3));
+				}
+			}
+		}
+
+		// Add edges
+		for(long e : predictedEdges) {
+			long source = dn.getSource(e);
+			long dest = dn.getDest(e);
+			Relation r = dn.getRelation(e);
+			pdn.addVertex(dest) ;
+			pdn.addEdge(r.getId(), source, dest);
+		}
+		
+		return pdn;
+	}
+	
+	public int loadPatterns(int maxHop, String prefix, String postfix, int[] conceptList) throws Exception {
+		
+		for(int concept : conceptList) {
+			Vector<TreeMap<String, Integer>> conceptResult = new Vector<TreeMap<String, Integer>>();
+			for(int i=0; i<maxHop; i++) {
+				conceptResult.add(new TreeMap<String, Integer>());
+			}
+			this.patterns.put(concept, conceptResult);
+		}
+		
+		// Load files
+		int count = 0;
+		for(int i=0; i<maxHop; i++) {
+			Vector<String> v = Utility.loadVector(prefix + (i+1) + postfix);
+			for(String s : v) {
+				String[] t = s.split(",");
+				int concept = Integer.parseInt(t[0]);
+				String pattern = t[1];
+				int frequency = Integer.parseInt(t[2]);
+				this.patterns.get(concept).get(i).put(pattern, frequency);
+				count++;
+			}
+		}			
+		
+		return count;
+	}
+
+	/**
+	 * @return the patterns
+	 */
+	public TreeMap<Integer, Vector<TreeMap<String, Integer>>> getPatterns() {
+		return patterns;
+	}
+}

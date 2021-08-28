@@ -1,0 +1,107 @@
+
+
+import network.*;
+import parameter.*;
+import model.*;
+import selector.*;
+import runflow.*;
+import java.io.*;
+import java.util.*;
+import score.*;
+import utilities.*;
+
+public class Main_IC{
+	public static int interval = 1;
+	public static void main( String[] argv ) throws Exception{
+
+		String globalProbability =  argv[0] ;
+		
+//		boolean isIII=false;
+//		String userFileName = "data/plurk_tongtong/user_table";
+//		String relationFileName = "data/plurk_tongtong/relation_table";
+//		String A0Filename = "data/plurk_tongtong/facebook/plurk.facebook.test.ubi.A0";
+//		String OldA0Filename = "data/plurk_tongtong/facebook/plurk.facebook.train_valid.ubi.oldA0";
+//		String runflowType = "-total";
+//		String outputFileName = "result/plurk_tongtong_facebook/test/tongtong_plurk.facebook.total.ic." + globalProbability + ".ubi.test.rst";
+
+		//boolean isIII=true;
+		//String userFileName = "data/plurk_iii/user_plurk.txt";
+		//String relationFileName = "data/plurk_iii/relation_plurk.txt";
+		String relationFileName = "data/plurk_iii/relation_plurk_dn.txt";
+		String A0Filename = "data/plurk_iii/concept40/iii.plurk.test.ubi.A0";
+		String OldA0Filename = "data/plurk_iii/concept40/iii.plurk.train_valid.ubi.oldA0";
+		String runflowType = "-total";
+		//String outputFileName = "result/plurk_iii_concept40/test/iii_plurk.concept40.total.ic." + globalProbability + ".ubi.test.rst";
+		String outputFileName = "result/plurk_iii_dn_concept40/test/iii_plurk_dn.concept40.total.ic." + globalProbability + ".ubi.test.rst";
+
+		double startTime = 0.0;
+		System.out.println("Loading...");
+		startTime = System.currentTimeMillis();
+		//Network n = NetworkFactory.getNetwork( isIII, userFileName , relationFileName );
+		Network n = DiffusionNetworkFactory.getDiffusionNetwork(relationFileName);
+		System.out.println("Elpased Time=" + ( System.currentTimeMillis() - startTime ) );
+		System.out.println("Loading...end");
+	
+		if( globalProbability.compareTo( "-inDegree" )== 0 ){
+			n = InDegLinkParamInitiator.initParam( n); 
+		}else{
+			double p = Double.parseDouble( globalProbability );
+			n = IcProbabilityInitiator.initParam(n , p );
+		}
+
+		Collection<Long> A0 =null ;	
+		A0 = FromFileSelector.get( A0Filename );  
+		Collection<Long> oldA0 = null;
+		oldA0 = FromFileSelector.get( OldA0Filename );
+
+		System.out.println("Running....");
+		startTime = System.currentTimeMillis();
+		// init model
+		IcModel model= new IcModel();
+		// init scores
+		Map<Long, Double> scores = new HashMap<Long, Double>();
+		// init scorer
+		Scorer scorer = new IFScorer();
+		// init runflow
+		Runflow runflow = null ;
+		TotalRunflow totalflow=null; 
+		if( runflowType.compareTo( "-loo" ) == 0){
+			runflow = new LOORunflow();
+		}else if( runflowType.compareTo("-obo")== 0 ) {
+	//		runflow = new OBORunflow();
+			OBORunflow tmpflow = new OBORunflow();
+			String pathOutput = outputFileName + ".path";
+			File pathFile = new File( pathOutput );
+			if( pathFile.exists() ){
+				pathFile.delete();
+			}
+			tmpflow.setPathOutput( pathOutput ); 
+			runflow = tmpflow ;
+		}else if( runflowType.compareTo( "-total") == 0 ){
+			totalflow = new TotalRunflow();
+		}else{
+			System.out.println("Error :Please setting run flow.");
+			return ;
+		}
+		if( ( runflowType.compareTo( "-loo" ) == 0 ) || ( runflowType.compareTo("-obo") == 0 )){ 
+			startTime = System.currentTimeMillis();
+			runflow.run( model, n , oldA0, A0 , scorer, scores ); 	
+			System.out.println("Elpased Time=" + ( System.currentTimeMillis() - startTime ) );
+			System.out.println("Running...end");
+
+			IOUtility.writeScores( outputFileName,  scores );
+		}else if(  runflowType.compareTo( "-total")== 0 ){
+			startTime = System.currentTimeMillis();
+			Network o_n = totalflow.run( model, n , oldA0, A0 ); 
+			IOUtility.writeA0Forest( outputFileName, o_n, totalflow.getLink2time() , A0 );     
+			System.out.println("Elpased Time=" + ( System.currentTimeMillis() - startTime ) );
+		
+			System.out.println("--dump old a0 path-- ");
+			IOUtility.writeA0Forest( outputFileName + ".oldA0" , o_n, totalflow.getLink2time() , oldA0 );
+			
+			System.out.println("Running...end");
+		}
+	}
+}
+
+	

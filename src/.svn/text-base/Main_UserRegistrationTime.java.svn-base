@@ -1,0 +1,26 @@
+import java.util.*;
+import network.*;
+
+public class Main_UserRegistrationTime {
+
+	public static void main(String[] args) throws Exception {
+		
+		// Load user
+		Network n = new Network();
+		NetworkFactory.loadUser(false, n, "data/user_table");
+		System.out.println("User = " + n.getUserCount());
+		
+		// Timer start
+		long startTime = (new Date()).getTime();
+		System.out.println("Timer start ... ");
+
+		// Compute and save login time
+		//UserRegistrationTimeManager.computeAndSaveUserRegistrationTime(n, "data/message", "data/response", "data/user_registration_time");
+		UserRegistrationTimeManager.computeAndSaveUserRegistrationTime(n, "data/message_10000", "data/response_10000", "data/user_registration_time_10000");
+		
+		// Timer stop
+		long stopTime = (new Date()).getTime();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Timer stop, elapsed seconds = " + elapsedTime/1000);
+	}
+}
